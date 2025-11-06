@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harris Kalça Skoru (HHS) Hesaplayıcı</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f8f9fa;
+            color: #212529;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 25px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        h1, h2 {
+            color: #0056b3;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 10px;
+        }
+        h2 {
+            font-size: 1.5em;
+            margin-top: 30px;
+        }
+        .section {
+            margin-bottom: 25px;
+            background-color: #fdfdfd;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 20px;
+        }
+        .question {
+            font-weight: bold;
+            color: #343a40;
+            margin-bottom: 10px;
+        }
+        .option {
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        .option input[type="radio"] {
+            margin-right: 10px;
+        }
+        .option label {
+            cursor: pointer;
+        }
+        .note {
+            font-size: 0.9em;
+            color: #6c757d;
+            background-color: #f1f3f5;
+            padding: 10px;
+            border-radius: 4px;
+            border-left: 3px solid #0056b3;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #ffffff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #results {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #e6f7ff;
+            border: 1px solid #b3e0ff;
+            border-radius: 5px;
+            text-align: center;
+            display: none; /* Başlangıçta gizli */
+        }
+        #results h3 {
+            margin-top: 0;
+            color: #0056b3;
+            font-size: 1.8em;
+        }
+        #results p {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #004085;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Harris Kalça Skoru (HHS) Hesaplayıcı</h1>
+        <p>Lütfen hastanın durumuna en uygun seçeneği işaretleyin.</p>
+
+        <form id="hhsForm">
+
+            <div class="section">
+                <h2>BÖLÜM 1: Ağrı (Maks. 44 Puan)</h2>
+                <div class="question">Ağrı düzeyini seçiniz:</div>
+                <div class="option">
+                    <label><input type="radio" name="pain" value="44"> (44) Ağrı yok veya hissedilmiyor</label>
+                </div>
+                <div class="option">
+                    <label><input type="radio" name="pain" value="40"> (40) Hafif, ara sıra ağrı, aktivite kısıtlaması yok</label>
+                </div>
+                <div class="option">
+                    <label><input type="radio" name="pain" value="30"> (30) Orta düzeyde ağrı, tolere edilebilir, ancak normal aktivitede bazı kısıtlamalar yapar, ara sıra ağrı kesici gerektirebilir</label>
+                </div>
+                <div class="option">
+                    <label><input type="radio" name="pain" value="20"> (20) Belirgin ağrı, aktivite ciddi şekilde kısıtlı</label>
+                </div>
+                <div class="option">
+                    <label><input type="radio" name="pain" value="10"> (10) Ciddi ağrı, istirahatte ağrı, yürüme mesafesi çok kısıtlı</label>
+                </div>
+                <div class="option">
+                    <label><input type="radio" name="pain" value="0"> (0) Tamamen ağrılı ve engelli, yatağa bağımlı</label>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>BÖLÜM 2: Fonksiyon (Maks. 47 Puan)</h2>
+                
+                <div class="question">2a. Yürüyüş (Maks. 33 Puan)</div>
+                
+                <div class="question" style="margin-left: 20px;">i. Aksama:</div>
+                <div class="option" style="margin-left: 20px;">
+                    <label><input type="radio" name="gait_limp" value="11"> (11) Aksama yok</label>
+                </div>
+                <div class="option" style="margin-left: 20px;">
+                    <label><input type="radio" name="gait_limp" value="8"> (8) Hafif aksama</label>
+                </div>
+                <div class="option" style="margin-left: 20px;">
+                    <label><input type="radio" name="gait_limp" value="5"> (5) Belirgin aksama</label>
+                </div>
+                <div class="option" style="margin-left: 20px;">
+                    <label><input type="radio" name="gait_limp" value="0"> (0) Yürüyemiyor veya sadece evde</label>
+                </div>
+
+                <div class="question" style="margin-left: 20px; margin-top: 15px;">ii. Destek Kullanımı:</div>
+                <div class="option" style="margin-left: 20px;">
+                    <label><input type="radio" name="gait_support" value="11"> (11) Desteksiz</label>
+                </div>
+                <div class="option" style="margin-left: 20px;">
+                    <label><input type="radio" name="gait_support" value="7"> (7) Uzun yürüyüşlerde baston</label>
+                </div>
+                <div class="option" style="margin-left: 20px;">
+                    <label><input type="radio" name="gait_support" value="5"> (5) Tam zamanlı baston</label>
+                </div>
+                <div class="option" style="margin-left: 20px;">
+                    <label><input type="radio" name="gait_support" value="3"> (3) Tek koltuk değneği</label>
+                </div>
+                <div class="option" style="margin-left: 20px;">
+                    <label><input type="radio" name="gait_support" value="2"> (2) İki baston</label>
+                </div>
+                <div class="option" style="margin-left: 20px;">
+                    <label><input type="radio" name="gait_support" value="0"> (0) İki koltuk değneği veya yürüteç</label>
+                </div>
+
+                <div class="question" style="margin-left: 20px; margin-top: 15px;">iii. Yürüme Mesafesi:</div>
+                <div class="option" style="margin-left: 20px;">
+                    <label><input type="radio" name="gait_distance" value="11"> (11) Sınırsız</label>
+                </div>
+                <div class="option" style="margin-left: 20px;">
+                    <label><input type="radio" name="gait_distance" value="8"> (8) 6 blok (yaklaşık 1 km)</label>
+                </div>
+                <div class="option" style="margin-left: 20px;">
+                    <label><input type="radio" name="gait_distance" value="5"> (5) 2-3 blok</label>
+                </div>
+                <div class="option" style="margin-left: 20px;">
+                    <label><input type="radio" name="gait_distance" value="2"> (2) Sadece iç mekanda</label>
+                </div>
+                <div class="option" style="margin-left: 20px;">
+                    <label><input type="radio" name="gait_distance" value="0"> (0) Yatağa/sandalyeye bağımlı</label>
+                </div>
+
+                <hr style="margin: 25px 0;">
+
+                <div class="question">2b. Aktiviteler (Maks. 14 Puan)</div>
+                
+                <div class="question" style="margin-left: 20px;">i. Merdiven:</div>
+                <div class="option" style="margin-left: 20px;">
+                    <label><input type="radio" name="activity_stairs" value="4"> (4) Normal, tırabzansız</label>
+                </div>
+                <div class="option" style="margin-left: 20px;">
+                    <label><input type="radio" name="activity_stairs" value="2"> (2) Tırabzan kullanarak</label>
+                </div>
+                <div class="option" style="margin-left: 20px;">
+                    <label><input type="radio" name="activity_stairs" value="1"> (1) Tırabzanla bile zorlukla</label>
+                </div>
+                <div class="option" style="margin-left: 20px;">
+                    <label><input type="radio" name="activity_stairs" value="0"> (0) Çıkamıyor</label>
+                </div>
+
+                <div class="question" style="margin-left: 20px; margin-top: 15px;">ii. Çorap/Ayakkabı Giyme:</div>
+                <div class="option" style="margin-left: 20px;">
+                    <label><input type="radio" name="activity_socks" value="4"> (4) Kolaylıkla</label>
+                </div>
+                <div class="option" style="margin-left: 20px;">
+                    <label><input type="radio" name="activity_socks" value="2"> (2) Zorlukla</label>
+                </div>
+                <div class="option" style="margin-left: 20px;">
+                    <label><input type="radio" name="activity_socks" value="0"> (0) Giyemiyor (Yardımla)</label>
+                </div>
+
+                <div class="question" style="margin-left: 20px; margin-top: 15px;">iii. Oturma:</div>
+                <div class="option" style="margin-left: 20px;">
+                    <label><input type="radio" name="activity_sitting" value="5"> (5) Herhangi bir sandalyede 1 saat rahatça</label>
+                </div>
+                <div class="option" style="margin-left: 20px;">
+                    <label><input type="radio" name="activity_sitting" value="3"> (3) Yüksek sandalyede 30 dk</label>
+                </div>
+                <div class="option" style="margin-left: 20px;">
+                    <label><input type="radio" name="activity_sitting" value="0"> (0) Sandalyede rahat oturamıyor</label>
+                </div>
+
+                <div class="question" style="margin-left: 20px; margin-top: 15px;">iv. Toplu Taşıma:</div>
+                <div class="option" style="margin-left: 20px;">
+                    <label><input type="radio" name="activity_transport" value="1"> (1) Arabaya/toplu taşımaya binebiliyor</label>
+                </div>
+                <div class="option" style="margin-left: 20px;">
+                    <label><input type="radio" name="activity_transport" value="0"> (0) Binemiyor</label>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>BÖLÜM 3: Deformite (Maks. 4 Puan)</h2>
+                <div class="question">Hastada aşağıdakilerden herhangi biri var mı?</div>
+                <p class="note">Sabit fleksiyon kontraktürü > 30°<br>
+                    Sabit adduksiyon kontraktürü > 10°<br>
+                    Sabit internal rotasyon kontraktürü > 10°<br>
+                    Ekstremite boy farkı > 3 cm</p>
+                <div class="option">
+                    <label><input type="radio" name="deformity" value="4"> (4) Yukarıdakilerin hiçbiri YOK</label>
+                </div>
+                <div class="option">
+                    <label><input type="radio" name="deformity" value="0"> (0) Yukarıdakilerden en az biri MEVCUT</label>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>BÖLÜM 4: Hareket Açıklığı (Maks. 5 Puan)</h2>
+                <div class="question">Hesaplanan Hareket Açıklığı (ROM) Puanı:</div>
+                <p class="note">Bu puan, kalça fleksiyon, abdüksiyon, addüksiyon, eksternal rotasyon ve internal rotasyon derecelerinin toplam "indeks değerine" göre belirlenir. Lütfen hastanın muayenesine göre toplam ROM puanını seçin.</p>
+                
+                <div class="option">
+                    <label><input type="radio" name="rom" value="5"> (5) Mükemmel (İndeks Değeri > 210 veya eşdeğeri)</label>
+                </div>
+                <div class="option">
+                    <label><input type="radio" name="rom" value="4"> (4) İyi (İndeks Değeri 160-210)</label>
+                </div>
+                <div class="option">
+                    <label><input type="radio" name="rom" value="3"> (3) Orta (İndeks Değeri 100-159)</label>
+                </div>
+                <div class="option">
+                    <label><input type="radio" name="rom" value="2"> (2) Zayıf (İndeks Değeri 50-99)</label>
+                </div>
+                <div class="option">
+                    <label><input type="radio" name="rom" value="1"> (1) Çok Zayıf (İndeks Değeri < 50)</label>
+                </div>
+                <div class="option">
+                    <label><input type="radio" name="rom" value="0"> (0) Ankiloz (Hareket yok)</label>
+                </div>
+            </div>
+
+            <button type="button" onclick="calculateHHS()">PUANI HESAPLA</button>
+
+            <div id="results">
+                <h3 id="totalScore">Toplam Puan: 0</h3>
+                <p id="scoreInterpretation">Sonuç: -</p>
+            </div>
+
+        </form>
+    </div>
+
+    <script>
+        function calculateHHS() {
+            let totalScore = 0;
+            const form = document.getElementById('hhsForm');
+
+            // Helper fonksiyon: Seçili radio butonun değerini alır
+            function getRadioValue(name) {
+                const radios = form.elements[name];
+                for (let i = 0; i < radios.length; i++) {
+                    if (radios[i].checked) {
+                        return parseInt(radios[i].value, 10);
+                    }
+                }
+                return 0; // Hiçbiri seçilmemişse 0 döndür
+            }
+
+            // Puanları topla
+            totalScore += getRadioValue('pain');
+            totalScore += getRadioValue('gait_limp');
+            totalScore += getRadioValue('gait_support');
+            totalScore += getRadioValue('gait_distance');
+            totalScore += getRadioValue('activity_stairs');
+            totalScore += getRadioValue('activity_socks');
+            totalScore += getRadioValue('activity_sitting');
+            totalScore += getRadioValue('activity_transport');
+            totalScore += getRadioValue('deformity');
+            totalScore += getRadioValue('rom');
+
+            // Sonucu yorumla
+            let interpretation = "";
+            if (totalScore >= 90) {
+                interpretation = "Mükemmel Sonuç (Excellent)";
+            } else if (totalScore >= 80) {
+                interpretation = "İyi Sonuç (Good)";
+            } else if (totalScore >= 70) {
+                interpretation = "Orta Düzey Sonuç (Fair)";
+            } else {
+                interpretation = "Zayıf Sonuç (Poor)";
+            }
+
+            // Sonuçları göster
+            const resultsDiv = document.getElementById('results');
+            document.getElementById('totalScore').innerText = "Toplam Puan: " + totalScore;
+            document.getElementById('scoreInterpretation').innerText = "Sonuç: " + interpretation;
+            resultsDiv.style.display = 'block';
+
+            // Sayfayı sonuca kaydır
+            resultsDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+
+</body>
+</html>
