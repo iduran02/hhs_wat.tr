@@ -262,8 +262,7 @@
         // !!! DİKKAT: BURAYA KENDİ WHATSAPP NUMARANIZI YAZIN !!!
         // Örnek: const DOKTORUN_TELEFON_NUMARASI = "905321234567";
         // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        const DOKTORUN_TELEFON_NUMARASI = "905xxxxxxxxx"; // <<<<<<<<<<<< BURAYI DÜZENLEYİN
-        
+        const DOKTORUN_TELEFON_NUMARASI = "905426128102"; // <<<<<<<<<<<< BURAYI DÜZENLEYİN
 
 
         function calculateHHS() {
@@ -286,7 +285,11 @@
             totalScore += getRadioValue('gait_support');
             totalScore += getRadioValue('gait_distance');
             totalScore += getRadioValue('activity_stairs');
-            totalScore += getRadioG('activity_socks');
+            
+            // !!!!!!! HATA BURADAYDI, DÜZELTİLDİ !!!!!!!
+            totalScore += getRadioValue('activity_socks'); 
+            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            
             totalScore += getRadioValue('activity_sitting');
             totalScore += getRadioValue('activity_transport');
             totalScore += getRadioValue('deformity');
@@ -310,13 +313,16 @@
             document.getElementById('scoreInterpretation').innerText = "Sonuç: " + interpretation;
             resultsDiv.style.display = 'block';
 
-            // *** YENİ EKLENDİ: WhatsApp butonunu görünür yap ***
+            // WhatsApp butonunu görünür yap
             document.getElementById('sendToDoctorButton').style.display = 'block';
 
             // Sayfayı sonuca kaydır
             resultsDiv.scrollIntoView({ behavior: 'smooth' });
         }
+        
 
+
+        
 
         // *** YENİ EKLENEN DOKTORA GÖNDERME FONKSİYONU ***
         function sendResultsToDoctor() {
@@ -364,3 +370,4 @@
 
 </body>
 </html>
+
