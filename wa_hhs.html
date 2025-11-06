@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hastaya Form Gönderme Aracı</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f8f9fa;
+            color: #212529;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        h1 {
+            color: #0056b3;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #495057;
+        }
+        .form-group input[type="tel"],
+        .form-group input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            font-size: 1.1em;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            box-sizing: border-box; 
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #ffffff;
+            background-color: #25D366; /* WhatsApp Yeşili */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #128C7E;
+        }
+        .note {
+            font-size: 0.9em;
+            color: #6c757d;
+            background-color: #f1f3f5;
+            padding: 15px;
+            border-radius: 4px;
+            border-left: 4px solid #0056b3;
+            margin-top: 25px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Hastaya Form Linki Gönder</h1>
+        
+        <div class="form-group">
+            <label for="hasta_adi">Hastanın Adı (İsteğe bağlı):</label>
+            <input type="text" id="hasta_adi" placeholder="Örn: Ahmet">
+        </div>
+
+        <div class="form-group">
+            <label for="hasta_telefon">Hastanın WhatsApp Numarası:</label>
+            <input type="tel" id="hasta_telefon" placeholder="Örn: 5xxxxxxxxx" required>
+        </div>
+        
+        <button type="button" onclick="sendFormLink()">WhatsApp ile Gönder</button>
+
+        <p class="note">
+            <strong>Önemli:</strong> Bu aracın çalışması için aşağıdaki JavaScript kodunu düzenleyip, 
+            internete yüklediğiniz Harris Kalça Skoru formunuzun linkini 
+            <code>FORM_LINKI_BURADA</code> yazan yere yapıştırmalısınız.
+        </p>
+    </div>
+
+    <script>
+        // *** ADIM 3: BURAYI DÜZENLEYİN ***
+        // Adım 1'de internete yüklediğiniz 'harris-skor.html' dosyasının 
+        // tam linkini tırnak işaretleri arasına yapıştırın.
+        const FORM_LINKI_BURADA = "https://adresiniz.com/harris-skor.html"; 
+        // Örnek: const FORM_LINKI_BURADA = "https://essiz-bir-adres.netlify.app";
+
+
+        function sendFormLink() {
+            // Linkin girilip girilmediğini kontrol et
+            if (FORM_LINKI_BURADA === "https://adresiniz.com/harris-skor.html" || FORM_LINKI_BURADA === "") {
+                alert("LÜTFEN KODU DÜZENLEYİN!\n\nHTML dosyasını açıp 'FORM_LINKI_BURADA' değişkenine, internete yüklediğiniz formun gerçek linkini girmelisiniz.");
+                return;
+            }
+
+            // 1. Bilgileri al
+            let phone = document.getElementById('hasta_telefon').value;
+            const name = document.getElementById('hasta_adi').value;
+
+            // 2. Telefon numarasını formatla
+            if (!phone) {
+                alert("Lütfen hastanın telefon numarasını girin.");
+                return;
+            }
+            phone = phone.replace(/\s/g, ''); // Boşlukları sil
+            if (phone.startsWith('0')) {
+                phone = phone.substring(1); // Başındaki 0'ı kaldır
+            }
+            if (!phone.startsWith('90')) {
+                phone = '90' + phone; // 90 ekle
+            }
+
+            // 3. Mesajı oluştur
+            let message = "";
+            if (name) {
+                message = `Merhaba ${name} Hanım/Bey,\n\n`;
+            } else {
+                message = `Merhaba,\n\n`;
+            }
+            
+            message += `Kalça fonksiyonlarınızı değerlendirmek için lütfen aşağıdaki linkte bulunan formu doldurunuz:\n\n`;
+            message += FORM_LINKI_BURADA;
+            message += `\n\nSağlıklı günler dilerim.`;
+
+            // 4. WhatsApp linkini oluştur ve aç
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappURL = `https://wa.me/${phone}?text=${encodedMessage}`;
+            
+            window.open(whatsappURL, '_blank');
+        }
+    </script>
+
+</body>
+</html>
