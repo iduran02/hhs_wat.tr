@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harris Kalça Skoru (HHS) Hesaplayıcı</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f8f9fa;
+            color: #212529;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 25px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        h1, h2 {
+            color: #0056b3;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 10px;
+        }
+        h2 {
+            font-size: 1.5em;
+            margin-top: 30px;
+        }
+        .section {
+            margin-bottom: 25px;
+            background-color: #fdfdfd;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #495057;
+        }
+        .form-group input[type="text"],
+        .form-group input[type="tel"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            box-sizing: border-box; 
+        }
+        
+        .question {
+            font-weight: bold;
+            color: #343a40;
+            margin-bottom: 10px;
+        }
+        .option {
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        .option input[type="radio"] {
+    _BÖLÜM 1: Ağrı (Maks. 44 Puan)         margin-right: 10px;
+        }
+        .option label {
+            cursor: pointer;
+        }
+        .note {
+            font-size: 0.9em;
+            color: #6c757d;
+            background-color: #f1f3f5;
+            padding: 10px;
+            border-radius: 4px;
+            border-left: 3px solid #0056b3;
+        }
+        
+        /* Buton Stilleri */
+        button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+       _BÖLÜM 1: Ağrı (Maks. 44 Puan)  
+        #calculateButton {
+            background-color: #007bff;
+        }
+        #calculateButton:hover {
+            background-color: #0056b3;
+        }
+        
+        /* YENİ EKLENEN WHATSAPP GÖNDERME BUTONU STİLİ */
+        #sendToDoctorButton {
+            background-color: #25D366; /* WhatsApp Yeşili */
+            margin-top: 15px;
+            display: none; /* Başlangıçta gizli */
+        }
+        #sendToDoctorButton:hover {
+            background-color: #128C7E;
+        }
+        
+        #results {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #e6f7ff;
+            border: 1px solid #b3e0ff;
+            border-radius: 5px;
+            text-align: center;
+            display: none; /* Başlangıçta gizli */
+        }
+        #results h3 {
+            margin-top: 0;
+            color: #0056b3;
+            font-size: 1.8em;
+        }
+        #results p {
+            font-size: 1.3em;
+          t_ font-weight: bold;
+            color: #004085;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Harris Kalça Skoru (HHS) Hesaplayıcı</h1>
+
+        <form id="hhsForm" onsubmit="return false;">
+
+            <div class="section">
+                <h2>Hasta Bilgileri</h2>
+                
+                <div class="form-group">
+                    <label for="hasta_adi">Adınız:</label>
+                    <input type="text" id="hasta_adi" name="hasta_adi" required>
+                </div>
+                
+                <div class="form-group">
+              _BÖLÜM 1: Ağrı (Maks. 44 Puan)       <label for="hasta_soyadi">Soyadınız:</label>
+                    <input type="text" id="hasta_soyadi" name="hasta_soyadi" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="hasta_tc">T.C. Kimlik Numarası (isteğe bağlı):</label>
+                    <input type="text" id="hasta_tc" name="hasta_tc" maxlength="11" pattern="\d{11}">
+                </div>
+    _BÖLÜM 1: Ağrı (Maks. 44 Puan)       </div>
+
+            <div class="section">
+                <h2>BÖLÜM 1: Ağrı (Maks. 44 Puan)</h2>
+                <div class="option">
+                    <label><input type="radio" name="pain" value="44"> (44) Ağrı yok veya hissedilmiyor</label>
+                </div>
+                <div class="option">
+                    <label><input type="radio" name="pain" value="40"> (40) Hafif, ara sıra ağrı, aktivite kısıtlaması yok</label>
+                </div>
+                <div class="option">
+                    <label><input type="radio" name="pain" value="30"> (30) Orta düzeyde ağrı, tolere edilebilir...</label>
+                </div>
+                <div class="option">
+             _BÖLÜM 1: Ağrı (Maks. 44 Puan)       <label><input type="radio" name="pain" value="20"> (20) Belirgin ağrı, aktivite ciddi şekilde kısıtlı</label>
+                </div>
+                <div class="option">
+                    <label><input type="radio" name="pain" value="10"> (10) Ciddi ağrı, istirahatte ağrı...</label>
+                </div>
+         _BÖLÜM 1: Ağrı (Maks. 44 Puan)       <div class="option">
+                    <label><input type="radio" name="pain" value="0"> (0) Tamamen ağrılı ve engelli, yatağa bağımlı</label>
+                </div>
+            </div>
+
+            <div class="section">
+             _BÖLÜM 1: Ağrı (Maks. 44 Puan)   <h2>BÖLÜM 2: Fonksiyon (Maks. 47 Puan)</h2>
+             _BÖLÜM 1: Ağrı (Maks. 44 Puan)   <div class="question">2a. Yürüyüş (Maks. 33 Puan)</div>
+                <div class="question" style="margin-left: 20px;">i. Aksama:</div>
+                <div class="option" style="margin-left: 20px;"><label><input type="radio" name="gait_limp" value="11"> (11) Aksama yok</label></div>
+         _BÖLÜM 1: Ağrı (Maks. 44 Puan)       <div class="option" style="margin-left: 20px;"><label><input type="radio" name="gait_limp" value="8"> (8) Hafif aksama</label></div>
+                <div class="option" style="margin-left: 20px;"><label><input type="radio" name="gait_limp" value="5"> (5) Belirgin aksama</label></div>
+       _BÖLÜM 1: Ağrı (Maks. 44 Puan)         <div class="option" style="margin-left: 20px;"><label><input type="radio" name="gait_limp" value="0"> (0) Yürüyemiyor</label></div>
+         _BÖLÜM 1: Ağrı (Maks. 44 Puan)     <div class="question" style="margin-left: 20px; margin-top: 15px;">ii. Destek Kullanımı:</div>
+                <div class="option" style="margin-left: 20px;"><label><input type="radio" name="gait_support" value="11"> (11) Desteksiz</label></div>
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)             <div class="option" style="margin-left: 20px;"><label><input type="radio" name="gait_support" value="7"> (7) Uzun yürüyüşlerde baston</label></div>
+                <div class="option" style="margin-left: 20px;"><label><input type="radio" name="gait_support" value="5"> (5) Tam zamanlı baston</label></div>
+     _BÖLÜM 1: Ağrı (Maks. 44 Puan)           <div class="option" style="margin-left: 20px;"><label><input type="radio" name="gait_support" value="3"> (3) Tek koltuk değneği</label></div>
+                <div class="option" style="margin-left: 20px;"><label><input type="radio" name="gait_support" value="2"> (2) İki baston</label></div>
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)             <div class="option" style="margin-left: 20px;"><label><input type="radio" name="gait_support" value="0"> (0) İki koltuk değneği veya yürüteç</label></div>
+Ağrı (Maks. 44 Puan)          _BÖLÜM 1: Ağrı (Maks. 44 Puan)       <div class="question" style="margin-left: 20px; margin-top: 15px;">iii. Yürüme Mesafesi:</div>
+       _BÖLÜM 1: Ağrı (Maks. 44 Puan)         <div class="option" style="margin-left: 20px;"><label><input type="radio" name="gait_distance" value="11"> (11) Sınırsız</label></div>
+                <div class="option" style="margin-left: 20px;"><label><input type="radio" name="gait_distance" value="8"> (8) 6 blok (yaklaşık 1 km)</label></div>
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)          _BÖLÜM 1: Ağrı (Maks. 44 Puan)     <div class="option" style="margin-left: 20px;"><label><input type="radio" name="gait_distance" value="5"> (5) 2-3 blok</label></div>
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)             <div class="option" style="margin-left: 20px;"><label><input type="radio" name="gait_distance" value="2"> (2) Sadece iç mekanda</label></div>
+         _BÖLÜM 1: Ağrı (Maks. 44 Puan)       <div class="option" style="margin-left: 20px;"><label><input type="radio" name="gait_distance" value="0"> (0) Yatağa/sandalyeye bağımlı</label></div>
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)           <hr style="margin: 25px 0;">
+                <div class="question">2b. Aktiviteler (Maks. 14 Puan)</div>
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)             <div class="question" style="margin-left: 20px;">i. Merdiven:</div>
+       _BÖLÜM 1: Ağrı (Maks. 44 Puan)         <div class="option" style="margin-left: 20px;"><label><input type="radio" name="activity_stairs" value="4"> (4) Normal, tırabzansız</label></div>
+       _BÖLÜM 1: Ağrı (Maks. 44 Puan)         <div class="option" style="margin-left: 20px;"><label><input type="radio" name="activity_stairs" value="2"> (2) Tırabzan kullanarak</label></div>
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)             <div class="option" style="margin-left: 20px;"><label><input type="radio" name="activity_stairs" value="1"> (1) Tırabzanla bile zorlukla</label></div>
+       _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)     <div class="option" style="margin-left: 20px;"><label><input type="radio" name="activity_stairs" value="0"> (0) Çıkamıyor</label></div>
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)         <div class="question" style="margin-left: 20px; margin-top: 15px;">ii. Çorap/Ayakkabı Giyme:</div>
+     _BÖLÜM 1: Ağrı (Maks. 44 Puan)           <div class="option" style="margin-left: 20px;"><label><input type="radio" name="activity_socks" value="4"> (4) Kolaylıkla</label></div>
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)             <div class="option" style="margin-left: 20px;"><label><input type="radio" name="activity_socks" value="2"> (2) Zorlukla</label></div>
+     _BÖLÜM 1: Ağrı (Maks. 44 Puan)           <div class="option" style="margin-left: 20px;"><label><input type="radio" name="activity_socks" value="0"> (0) Giyemiyor (Yardımla)</label></div>
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)           <div class="question" style="margin-left: 20px; margin-top: 15px;">iii. Oturma:</div>
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)    _BÖLÜM 1: Ağrı (Maks. 44 Puan)       <div class="option" style="margin-left: 20px;"><label><input type="radio" name="activity_sitting" value="5"> (5) Herhangi bir sandalyede 1 saat rahatça</label></div>
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)          _BÖLÜM 1: Ağrı (Maks. 44 Puan)     <div class="option" style="margin-left: 20px;"><label><input type="radio" name="activity_sitting" value="3"> (3) Yüksek sandalyede 30 dk</label></div>
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)        _BÖLÜM 1: Ağrı (Maks. 44 Puan)       <div class="option" style="margin-left: 20px;"><label><input type="radio" name="activity_sitting" value="0"> (0) Sandalyede rahat oturamıyor</label></div>
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)        _BÖLÜM 1: Ağrı (Maks. 44 Puan)       <div class="question" style="margin-left: 20px; margin-top: 15px;">iv. Toplu Taşıma:</div>
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)    _BÖLÜM 1: Ağrı (Maks. 44 Puan)         <div class="option" style="margin-left: 20px;"><label><input type="radio" name="activity_transport" value="1"> (1) Arabaya/toplu taşımaya binebiliyor</label></div>
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)          _BÖLÜM 1: Ağrı (Maks. 44 Puan)     <div class="option" style="margin-left: 20px;"><label><input type="radio" name="activity_transport" value="0"> (0) Binemiyor</label></div>
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)       </div>
+
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)       <div class="section">
+         _BÖLÜM 1: Ağrı (Maks. 44 Puan)        <h2>BÖLÜM 3: Deformite (Maks. 4 Puan)</h2>
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)    _BÖLÜM 1: Ağrı (Maks. 44 Puan)       <div class="question">Hastada aşağıdakilerden herhangi biri var mı?</div>
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)         <p class="note">Sabit fleksiyon kontraktürü > 30°<br>Sabit adduksiyon kontraktürü > 10°<br>Sabit internal rotasyon kontraktürü > 10°<br>Ekstremite boy farkı > 3 cm</p>
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)    _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)       <div class="option"><label><input type="radio" name="deformity" value="4"> (4) Yukarıdakilerin hiçbiri YOK</label></div>
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)           <div class="option"><label><input type="radio" name="deformity" value="0"> (0) Yukarıdakilerden en az biri MEVCUT</label></div>
+     _BÖLÜM 1: Ağrı (Maks. 44 Puan)   </div>
+
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)         <div class="section">
+         _BÖLÜM 1: Ağrı (Maks. 44 Puan)       <h2>BÖLÜM 4: Hareket Açıklığı (Maks. 5 Puan)</h2>
+         _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)     <div class="question">Hesaplanan Hareket Açıklığı (ROM) Puanı:</div>
+     _BÖLÜM 1: Ağrı (Maks. 44 Puan)      _BÖLÜM 1: Ağrı (Maks. 44 Puan)     <p class="note">Bu puan, kalça fleksiyon, abdüksiyon... vb. toplam "indeks değerine" göre belirlenir. Lütfen muayeneye göre toplam ROM puanını seçin.</p>
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)      _BÖLÜM 1: Ağrı (Maks. 44 Puan)         <div class="option"><label><input type="radio" name="rom" value="5"> (5) Mükemmel (İndeks Değeri > 210)</label></div>
+         _BÖLÜM 1: Ağrı (Maks. 44 Puan)      _BÖLÜM 1: Ağrı (Maks. 44 Puan)   <div class="option"><label><input type="radio" name="rom" value="4"> (4) İyi (İndeks Değeri 160-210)</label></div>
+     _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)    _BÖLÜM 1: Ağrı (Maks. 44 Puan)     <div class="option"><label><input type="radio" name="rom" value="3"> (3) Orta (İndeks Değeri 100-159)</label></div>
+     _BÖLÜM 1: Ağrı (Maks. 44 Puan)        _BÖLÜM 1: Ağrı (Maks. 44 Puan)   <div class="option"><label><input type="radio" name="rom" value="2"> (2) Zayıf (İndeks Değeri 50-99)</label></div>
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)      _BÖLÜM 1: Ağrı (Maks. 44 Puan)         <div class="option"><label><input type="radio" name="rom" value="1"> (1) Çok Zayıf (İndeks Değeri < 50)</label></div>
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)      _BÖLÜM 1: Ağrı (Maks. 44 Puan)         <div class="option"><label><input type="radio" name="rom" value="0"> (0) Ankiloz (Hareket yok)</label></div>
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)       </div>
+
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)      _BÖLÜM 1: Ağrı (Maks. 44 Puan)     <button type="button" id="calculateButton" onclick="calculateHHS()">PUANI HESAPLA</button>
+
+     _BÖLÜM 1: Ağrı (Maks. 44 Puan)       <div id="results">
+                <h3 id="totalScore">Toplam Puan: 0</h3>
+                <p id="scoreInterpretation">Sonuç: -</p>
+                
+                <button type="button" id="sendToDoctorButton" onclick="sendResultsToDoctor()">
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)               Sonuçları Doktoruma WhatsApp ile Gönder
+                </button>
+             _BÖLÜM 1: Ağrı (Maks. 44 Puan)   </div>
+
+        </form>
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan) </div>
+
+    <script>
+
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)     // !!! DİKKAT: BURAYA KENDİ WHATSAPP NUMARANIZI YAZIN !!!
+        // Örnek: const DOKTORUN_TELEFON_NUMARASI = "905321234567";
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        const DOKTORUN_TELEFON_NUMARASI = "905426128102"; // <<<<<<<<<<<< BURAYI DÜZENLEYİN
+
+
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)       function calculateHHS() {
+     _BÖLÜM 1: Ağrı (Maks. 44 Puan)       let totalScore = 0;
+         _BÖLÜM 1: Ağrı (Maks. 44 Puan)   const form = document.getElementById('hhsForm');
+
+         _BÖLÜM 1: Ağrı (Maks. 44 Puan)   function getRadioValue(name) {
+         _BÖLÜM 1: Ağrı (Maks. 44 Puan)       const radios = form.elements[name];
+             _BÖLÜM 1: Ağrı (Maks. 44 Puan)   for (let i = 0; i < radios.length; i++) {
+       _BÖLÜM 1: Ağrı (Maks. 44 Puan)      _BÖLÜM 1: Ağrı (Maks. 44 Puan)       if (radios[i].checked) {
+               _BÖLÜM 1: Ağrı (Maks. 44 Puan)         return parseInt(radios[i].value, 10);
+     _BÖLÜM 1: Ağrı (Maks. 44 Puan)          _BÖLÜM 1: Ağrı (Maks. 44 Puan)   }
+       _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)       }
+       _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)     return 0; 
+       _BÖLÜM 1: Ağrı (Maks. 44 Puan)   }
+
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)     // Puanları topla
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)    _BÖLÜM 1: Ağrı (Maks. 44 Puan)   totalScore += getRadioValue('pain');
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)        _BÖLÜM 1: Ağrı (Maks. 44 Puan)   totalScore += getRadioValue('gait_limp');
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)    _BÖLÜM 1: Ağrı (Maks. 44 Puan)     totalScore += getRadioValue('gait_support');
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)        _BÖLÜM 1: Ağrı (Maks. 44 Puan)   totalScore += getRadioValue('gait_distance');
+s _BÖLÜM 1: Ağrı (Maks. 44 Puan)        _BÖLÜM 1: Ağrı (Maks. 44 Puan)   totalScore += getRadioValue('activity_stairs');
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)    _BÖLÜM 1: Ağrı (Maks. 44 Puan)     
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)             // !!!!!!! HATA BURADAYDI, DÜZELTİLDİ !!!!!!!
+s _BÖLÜM 1: Ağrı (Maks. 44 Puan)        _BÖLÜM 1: Ağrı (Maks. 44 Puan)   totalScore += getRadioValue('activity_socks'); 
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)    _BÖLÜM 1: Ağrı (Maks. 44 Puan)     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)      _BÖLÜM 1: Ağrı (Maks. 44 Puan)   
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)       totalScore += getRadioValue('activity_sitting');
+     _BÖLÜM 1: Ağrı (Maks. 44 Puan)       totalScore += getRadioValue('activity_transport');
+     _BÖLÜM 1: Ağrı (Maks. 44 Puan)       totalScore += getRadioValue('deformity');
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)    _BÖLÜM 1: Ağrı (Maks. 44 Puan)   totalScore += getRadioValue('rom');
+
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)       // Sonucu yorumla
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)      _BÖLÜM 1: Ağrı (Maks. 44 Puan)     let interpretation = "";
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)     if (totalScore >= 90) {
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)        _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)       interpretation = "Mükemmel Sonuç (Excellent)";
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)             } else if (totalScore >= 80) {
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)           interpretation = "İyi Sonuç (Good)";
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)    _BÖLÜM 1: Ağrı (Maks. 44 Puan)    _BÖLÜM 1: Ağrı (Maks. 44 Puan)   } else if (totalScore >= 70) {
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)    _BÖLÜM 1: Ağrı (Maks. 44 Puan)      _BÖLÜM 1: Ağrı (Maks. 44 Puan)         interpretation = "Orta Düzey Sonuç (Fair)";
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)           } else {
+     _BÖLÜM 1: Ağrı (Maks. 44 Puan)    _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)           interpretation = "Zayıf Sonuç (Poor)";
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)    _BÖLÜM 1: Ağrı (Maks. 44 Puan)   }
+
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)      _BÖLÜM 1: Ağrı (Maks. 44 Puan)     // Sonuçları göster
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)        _BÖLÜM 1: Ağrı (Maks. 44 Puan)   const resultsDiv = document.getElementById('results');
+     _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)     document.getElementById('totalScore').innerText = "Toplam Puan: " + totalScore;
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)    _BÖLÜM 1: Ağrı (Maks. 44 Puan)       document.getElementById('scoreInterpretation').innerText = "Sonuç: " + interpretation;
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)    _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)     resultsDiv.style.display = 'block';
+
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)      _BÖLÜM 1: Ağrı (Maks. 44 Puan)   // WhatsApp butonunu görünür yap
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)     document.getElementById('sendToDoctorButton').style.display = 'block';
+
+bu _BÖLÜM 1: Ağrı (Maks. 44 Puan)           // Sayfayı sonuca kaydır
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)    _BÖLÜM 1: Ağrı (Maks. 44 Puan)     resultsDiv.scrollIntoView({ behavior: 'smooth' });
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)   }
+     _BÖLÜM 1: Ağrı (Maks. 44 Puan)   
+        // =================================================================
+     _BÖLÜM 1: Ağrı (Maks. 44 Puan)   // ========= YENİ KOD BLOĞU BAŞLANGICI (DETAYLI DÖKÜM İÇİN) =========
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)   // =================================================================
+
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)         // *** YENİ EKLENEN YARDIMCI FONKSİYON ***
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)      _BÖLÜM 1: Ağrı (Maks. 44 Puan)   // Seçilen radio butonunun etiketindeki tam metni alır.
+     _BÖLÜM 1: Ağrı (Maks. 44 Puan)     function getSelectedAnswerText(name) {
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)    _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)     const form = document.getElementById('hhsForm');
+ _BÖLÜM 1: Ağrı (Maks. 44 Punsan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)     const radios = form.elements[name];
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)    _BÖLÜM 1: Ağrı (Maks. 44 Puan)     
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)    _BÖLÜM 1: Ağrı (Maks. 44 Puan)     if (!radios) return "Soru bulunamadı"; // Hata kontrolü
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)      _BÖLÜM 1: Ağrı (Maks. 44 Puan)     
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)           for (let i = 0; i < radios.length; i++) {
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)    _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)       if (radios[i].checked) {
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)      _BÖLÜM 1: Ağrı (Maks. 44 Puan)       // Label, input'un ebeveynidir (<label><input ...> Metin </label>)
+     _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)                 return radios[i].parentElement.innerText.trim(); 
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)         }
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)      _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)     }
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)    _BÖLÜM 1: Ağrı (Maks. 44 Puan)     return "Cevaplanmadı"; // Hiçbiri seçilmemişse
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)    _BÖLÜM 1: Ağrı (Maks. 44 Puan)     }
+
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)       // *** DOKTORA GÖNDERME FONKSİYONU (TAMAMEN GÜNCELLENDİ) ***
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)    _BÖLÜM 1: Ağrı (Maks. 44 Puan)     function sendResultsToDoctor() {
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)    _BÖLÜM 1: Ağrı (Maks. 44 Puan)     
+                if (DOKTORUN_TELEFON_NUMARASI === "905xxxxxxxxx" || DOKTORUN_TELEFON_NUMARASI.length < 12) {
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)             alert("Form sahibi (doktor) kendi telefon numarasını koda eklememiş. Lütfen doktorunuzla iletişime geçin.");
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)           return;
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)        _BÖLÜM 1: Ağrı (Maks. 44 Puan)       }
+
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)           const form = document.getElementById('hhsForm');
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)    _BÖLÜM 1: Ağrı (Maks. 44 Puan)         
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)       // 1. Hasta bilgilerini formdan al
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)    _BÖLÜM 1: Ağrı (Maks. 44 Puan)     const hastaAdi = form.elements['hasta_adi'].value;
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)     const hastaSoyadi = form.elements['hasta_soyadi'].value;
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)     const hastaTC = form.elements['hasta_tc'].value || "Belirtilmedi";
+
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)     // 2. Hesaplanan sonuçları al
+     _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)     const scoreText = document.getElementById('totalScore').innerText;
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)    _BÖLÜM 1: Ağrı (Maks. 44 Puan)   const interpretationText = document.getElementById('scoreInterpretation').innerText;
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)      _BÖLÜM 1: Ağrı (Maks. 44 Puan)     
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)       if (!hastaAdi || !hastaSoyadi) {
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)        _BÖLÜM 1: Ağrı (Maks. 44 Puan)         alert("Lütfen sonuçları göndermeden önce Ad ve Soyad alanlarını doldurun.");
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)         return;
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)       }
+
+         _BÖLÜM 1: Ağrı (Maks. 44 Puan)     // 3. WhatsApp mesajını (DETAYLI DÖKÜM İLE) oluştur
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)    _BÖLÜM 1: Ağrı (Maks. 44 Puan)     let message = `--- Harris Kalça Skoru Sonucu ---\n\n`;
+NB:  _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)     message += `Hasta Adı: *${hastaAdi} ${hastaSoyadi}*\n`;
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)    _BÖLÜM 1: Ağrı (Maks. 44 Puan)     message += `T.C. Kimlik No: ${hastaTC}\n\n`;
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)       message += `--- SKOR ÖZETİ ---\n`;
+ND:  _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)       message += `*${scoreText}*\n`;
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)    _BÖLÜM 1: Ağrı (Maks. 44 Puan)     message += `*${interpretationText}*\n\n`;
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)    _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)     
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)    _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)   message += `--- DETAYLI YANIT DÖKÜMÜ ---\n\n`;
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)        _BÖLÜM 1: Ağrı (Maks. 44 Puan)   message += `BÖLÜM 1: Ağrı\n`;
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)    _BÖLÜM 1: Ağrı (Maks. 44 Puan)   message += `*Yanıt:* ${getSelectedAnswerText('pain')}\n\n`;
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)    _BÖLÜM 1: Ağrı (Maks. 44 Puan)    _BÖLÜM 1: Ağrı (Maks. 44 Puan)   
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)    _BÖLÜM 1: Ağrı (Maks. 44 Puan)       message += `BÖLÜM 2: Fonksiyon\n`;
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)      _BÖLÜM 1: Ağrı (Maks. 44 Puan)     message += `Aksama:\n*Yanıt:* ${getSelectedAnswerText('gait_limp')}\n`;
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)    _BÖLÜM 1: Ağrı (Maks. 44 Puan)     message += `Destek Kullanımı:\n*Yanıt:* ${getSelectedAnswerText('gait_support')}\n`;
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)    _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)   message += `Yürüme Mesafesi:\n*Yanıt:* ${getSelectedAnswerText('gait_distance')}\n`;
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)    _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)   message += `Merdiven:\n*Yanıt:* ${getSelectedAnswerText('activity_stairs')}\n`;
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)    _BÖLÜM 1: Ağrı (Maks. 44 Puan)   message += `Çorap/Ayakkabı:\n*Yanıt:* ${getSelectedAnswerText('activity_socks')}\n`;
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)    _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)   message += `Oturma:\n*Yanıt:* ${getSelectedAnswerText('activity_sitting')}\n`;
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)         message += `Toplu Taşıma:\n*Yanıt:* ${getSelectedAnswerText('activity_transport')}\n\n`;
+
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)           message += `BÖLÜM 3: Deformite\n`;
+     _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)   message += `*Yanıt:* ${getSelectedAnswerText('deformity')}\n\n`;
+
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)   message += `BÖLÜM 4: Hareket Açıklığı\n`;
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)         message += `*Yanıt:* ${getSelectedAnswerText('rom')}\n\n`;
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)     
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)    _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)   message += `(Bu mesaj hasta tarafından form üzerinden otomatik olarak gönderilmiştir.)`;
+
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)           // 4. Mesajı URL formatına uygun hale getir
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)    _BÖLÜM 1: Ağrı (Maks. 44 Puan)       const encodedMessage = encodeURIComponent(message);
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)          _BÖLÜM 1: Ağrı (Maks. 44 Puan)   
+     _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)     // 5. WhatsApp linkini oluştur ve hastanın ekranında aç
+NB: _BÖLÜM 1: Ağrı (Maks. 44 Puan)      _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)   const whatsappURL = `https://wa.me/${DOKTORUN_TELEFON_NUMARASI}?text=${encodedMessage}`;
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)    _BÖLÜM 1: Ağrı (Maks. 44 Puan)   
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)    _BÖLÜM 1: Ağrı (Maks. 44 Puan)     window.open(whatsappURL, '_blank');
+       _BÖLÜM 1: Ağrı (Maks. 44 Puan)   }
+
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)         // =================================================================
+ _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)  _BÖLÜM 1: Ağrı (Maks. 44 Puan)   // ========= YENİ KOD BLOĞU BİTİŞİ ===============================
+       _BÖLÜM 1: Ağrı (Maks. 44 Puan)   // =================================================================
+   _BÖLÜM 1: Ağrı (Maks. 44 Puan)   </script>
+
+</body>
+</html>
