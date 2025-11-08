@@ -374,4 +374,164 @@
                     <div class="option"><label><input type="radio" name="f17" value="0"> (0) Hiç</label></div>
                     <div class="option"><label><input type="radio" name="f17" value="1"> (1) Hafif</label></div>
                     <div class="option"><label><input type="radio" name="f17" value="2"> (2) Orta</label></div>
-                    <div class="option"><label><input type="radio" name
+                    <div class="option"><label><input type="radio" name="f17" value="3"> (3) Şiddetli</label></div>
+                    <div class="option"><label><input type="radio" name="f17" value="4"> (4) Aşırı</label></div>
+                </div>
+            </div>
+
+            <button type="button" id="calculateButton" onclick="calculateWOMAC()">PUANLARI HESAPLA</button>
+
+            <div id="results">
+                <h2>WOMAC Alt Skorları (0-100)</h2>
+                <p class="note" style="text-align: center; font-weight: bold; font-size: 1.1em; color: #d9534f;">
+                    DİKKAT: 0 = En İyi (Sorun Yok), 100 = En Kötü (Aşırı Sorun)
+                </p>
+                <p id="scorePain">Ağrı (5 Soru): -</p>
+                <p id="scoreStiffness">Sertlik (2 Soru): -</p>
+                <p id="scoreFunction">Fiziksel Fonksiyon (17 Soru): -</p>
+                <p id="scoreTotal">TOPLAM WOMAC SKORU (24 Soru): -</p>
+                
+                <button type="button" id="sendToDoctorButton" onclick="sendResultsToDoctor()">
+                    Sonuçları Doktoruma WhatsApp ile Gönder
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+    <script>
+    
+        const DOKTORUN_TELEFON_NUMARASI = "905426128102"; // Sizin numaranız burada
+
+        let finalScores = {
+            pain: 0,
+            stiffness: 0,
+            function: 0,
+            total: 0
+        };
+
+        function calculateWOMAC() {
+            const form = document.getElementById('womacForm');
+            let missingQuestions = false;
+
+            function getRadioValue(name) {
+                const radios = form.elements[name];
+                if (!radios) return -1;
+                for (let i = 0; i < radios.length; i++) {
+                    if (radios[i].checked) {
+                        return parseInt(radios[i].value, 10);
+                    }
+                }
+                return -1; // Cevaplanmamış
+            }
+
+            let sums = { pain: 0, stiffness: 0, function: 0 };
+            
+            // Ağrı (P1-P5) - 5 soru
+            for (let i = 1; i <= 5; i++) {
+                let val = getRadioValue('p' + i);
+                if (val === -1) { missingQuestions = true; } else { sums.pain += val; }
+            }
+
+            // Sertlik (S1-S2) - 2 soru
+            for (let i = 1; i <= 2; i++) {
+                let val = getRadioValue('s' + i);
+                if (val === -1) { missingQuestions = true; } else { sums.stiffness += val; }
+            }
+
+            // Fonksiyon (F1-F17) - 17 soru
+            for (let i = 1; i <= 17; i++) {
+                let val = getRadioValue('f' + i);
+                if (val === -1) { missingQuestions = true; } else { sums.function += val; }
+            }
+
+            if (missingQuestions) {
+                alert("Lütfen tüm 24 soruyu cevapladığınızdan emin olun.");
+                return;
+            }
+
+            // 0-100 arasına dönüştür
+            // Formül: (ham_toplam * 100) / (max_mümkün_ham_puan)
+            // 100 = En Kötü, 0 = En İyi
+            // Max Puanlar: Pain=5*4=20, Stiffness=2*4=8, Function=17*4=68, Total=24*4=96
+            finalScores.pain = Math.round((sums.pain * 100) / 20);
+            finalScores.stiffness = Math.round((sums.stiffness * 100) / 8);
+            finalScores.function = Math.round((sums.function * 100) / 68);
+            
+            let totalSum = sums.pain + sums.stiffness + sums.function;
+            finalScores.total = Math.round((totalSum * 100) / 96);
+
+            // Sonuçları göster
+            const resultsDiv = document.getElementById('results');
+            document.getElementById('scorePain').innerText = `Ağrı: ${finalScores.pain} / 100`;
+            document.getElementById('scoreStiffness').innerText = `Sertlik: ${finalScores.stiffness} / 100`;
+            document.getElementById('scoreFunction').innerText = `Fiziksel Fonksiyon: ${finalScores.function} / 100`;
+            document.getElementById('scoreTotal').innerText = `TOPLAM WOMAC SKORU: ${finalScores.total} / 100`;
+            
+            resultsDiv.style.display = 'block';
+            document.getElementById('sendToDoctorButton').style.display = 'block';
+            resultsDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // =================================================================
+        // ========= DETAYLI DÖKÜM İÇİN FONKSİYONLAR =======================
+        // =================================================================
+
+        function getSelectedAnswerText(name) {
+            const form = document.getElementById('womacForm');
+            const radios = form.elements[name];
+            if (!radios) return "Soru bulunamadı";
+            
+            for (let i = 0; i < radios.length; i++) {
+                if (radios[i].checked) {
+                    return radios[i].parentElement.innerText.trim(); 
+                }
+            }
+            return "Cevaplanmadı";
+        }
+
+        function sendResultsToDoctor() {
+            if (DOKTORUN_TELEFON_NUMARASI.length < 12) {
+                alert("Form sahibi (doktor) kendi telefon numarasını koda eklememiş.");
+                return;
+            }
+
+            const form = document.getElementById('womacForm');
+            const hastaAdi = form.elements['hasta_adi'].value;
+            const hastaSoyadi = form.elements['hasta_soyadi'].value;
+            
+            if (!hastaAdi || !hastaSoyadi) {
+                alert("Lütfen sonuçları göndermeden önce Ad ve Soyad alanlarını doldurun.");
+                return;
+            }
+
+            let message = `--- WOMAC Osteoartrit Skoru Sonucu ---\n\n`;
+            message += `Hasta Adı: *${hastaAdi} ${hastaSoyadi}*\n\n`;
+            
+            message += `--- SKOR ÖZETİ (0=İyi, 100=Kötü) ---\n`;
+            message += `Ağrı: *${finalScores.pain} / 100*\n`;
+            message += `Sertlik: *${finalScores.stiffness} / 100*\n`;
+            message += `Fiziksel Fonksiyon: *${finalScores.function} / 100*\n`;
+            message += `TOPLAM SKOR: *${finalScores.total} / 100*\n\n`;
+            
+            message += `--- DETAYLI YANIT DÖKÜMÜ ---\n\n`;
+            message += `BÖLÜM 1: Ağrı\n`;
+            for(let i=1; i<=5; i++) { message += `P${i}: ${getSelectedAnswerText('p'+i)}\n`; }
+            
+            message += `\nBÖLÜM 2: Sertlik\n`;
+            for(let i=1; i<=2; i++) { message += `S${i}: ${getSelectedAnswerText('s'+i)}\n`; }
+            
+            message += `\nBÖLÜM 3: Fiziksel Fonksiyon\n`;
+            for(let i=1; i<=17; i++) { message += `F${i}: ${getSelectedAnswerText('f'+i)}\n`; }
+            
+            message += `\n(Bu mesaj hasta tarafından form üzerinden otomatik olarak gönderilmiştir.)`;
+
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappURL = `https://wa.me/${DOKTORUN_TELEFON_NUMARASI}?text=${encodedMessage}`;
+            
+            window.open(whatsappURL, '_blank');
+        }
+    </script>
+
+</body>
+</html>
