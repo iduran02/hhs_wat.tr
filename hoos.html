@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOOS Kalça Skoru Hesaplayıcı</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f8f9fa;
+            color: #212529;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 25px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        h1, h2 {
+            color: #0056b3;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 10px;
+        }
+        h2 {
+            font-size: 1.5em;
+            margin-top: 30px;
+        }
+        h3 {
+            font-size: 1.2em;
+            color: #343a40;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+        .section {
+            margin-bottom: 25px;
+            background-color: #fdfdfd;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #495057;
+        }
+        .form-group input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            box-sizing: border-box; 
+        }
+        
+        .question-group {
+            margin-bottom: 20px;
+        }
+        .question {
+            font-weight: bold;
+            color: #343a40;
+            margin-bottom: 10px;
+        }
+        .option {
+            margin-bottom: 10px;
+            cursor: pointer;
+            padding-left: 5px;
+        }
+        .option input[type="radio"] {
+            margin-right: 10px;
+        }
+        .option label {
+            cursor: pointer;
+        }
+        .note {
+            font-size: 0.9em;
+            color: #6c757d;
+            background-color: #f1f3f5;
+            padding: 10px;
+            border-radius: 4px;
+            border-left: 3px solid #0056b3;
+            margin-bottom: 15px;
+        }
+        
+        button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        #calculateButton {
+            background-color: #007bff;
+        }
+        #calculateButton:hover {
+            background-color: #0056b3;
+        }
+        
+        #sendToDoctorButton {
+            background-color: #25D366; /* WhatsApp Yeşili */
+            margin-top: 15px;
+            display: none; /* Başlangıçta gizli */
+        }
+        #sendToDoctorButton:hover {
+            background-color: #128C7E;
+        }
+        
+        #results {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #e6f7ff;
+            border: 1px solid #b3e0ff;
+            border-radius: 5px;
+            text-align: left;
+            display: none; /* Başlangıçta gizli */
+        }
+        #results h2 {
+            margin-top: 0;
+            text-align: center;
+            font-size: 1.8em;
+        }
+        #results p {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #004085;
+            border-bottom: 1px solid #b3e0ff;
+            padding-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>HOOS Kalça Skoru Hesaplayıcı</h1>
+        <p class="note">Aşağıdaki sorular, son bir hafta içinde kalçanızla ilgili yaşadığınız sorunlarla ilgilidir. Lütfen her soruya en uygun tek cevabı işaretleyin.</p>
+
+        <form id="hoosForm" onsubmit="return false;">
+
+            <div class="section">
+                <h2>Hasta Bilgileri</h2>
+                <div class="form-group">
+                    <label for="hasta_adi">Adınız:</label>
+                    <input type="text" id="hasta_adi" name="hasta_adi" required>
+                </div>
+                <div class="form-group">
+                    <label for="hasta_soyadi">Soyadınız:</label>
+                    <input type="text" id="hasta_soyadi" name="hasta_soyadi" required>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>S1: Semptomlar</h2>
+                
+                <div class="question-group">
+                    <div class="question">S1. Kalçanız ne sıklıkla şişiyor?</div>
+                    <div class="option"><label><input type="radio" name="s1" value="0"> Hiç</label></div>
+                    <div class="option"><label><input type="radio" name="s1" value="1"> Ayda bir</label></div>
+                    <div class="option"><label><input type="radio" name="s1" value="2"> Haftada bir</label></div>
+                    <div class="option"><label><input type="radio" name="s1" value="3"> Günde bir</label></div>
+                    <div class="option"><label><input type="radio" name="s1" value="4"> Her zaman</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">S2. Kalçanızdan gıcırtı veya 'tık' sesi geliyor mu?</div>
+                    <div class="option"><label><input type="radio" name="s2" value="0"> Hiç</label></div>
+                    <div class="option"><label><input type="radio" name="s2" value="1"> Nadiren</label></div>
+                    <div class="option"><label><input type="radio" name="s2" value="2"> Bazen</label></div>
+                    <div class="option"><label><input type="radio" name="s2" value="3"> Sık sık</label></div>
+                    <div class="option"><label><input type="radio" name="s2" value="4"> Her zaman</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">S3. Sabah kalktığınızda kalçanızda sertlik oluyor mu?</div>
+                    <div class="option"><label><input type="radio" name="s3" value="0"> Hiç</label></div>
+                    <div class="option"><label><input type="radio" name="s3" value="1"> Hafif</label></div>
+                    <div class="option"><label><input type="radio" name="s3" value="2"> Orta</label></div>
+                    <div class="option"><label><input type="radio" name="s3" value="3"> Şiddetli</label></div>
+                    <div class="option"><label><input type="radio" name="s3" value="4"> Aşırı</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">S4. Gün içinde (istirahat sonrası) kalçanızda sertlik oluyor mu?</div>
+                    <div class="option"><label><input type="radio" name="s4" value="0"> Hiç</label></div>
+                    <div class="option"><label><input type="radio" name="s4" value="1"> Hafif</label></div>
+                    <div class="option"><label><input type="radio" name="s4" value="2"> Orta</label></div>
+                    <div class="option"><label><input type="radio" name="s4" value="3"> Şiddetli</label></div>
+                    <div class="option"><label><input type="radio" name="s4" value="4"> Aşırı</label></div>
+                </div>
+                
+                <div class="question-group">
+                    <div class="question">S5. Kalçanızda hareket kısıtlılığı hissediyor musunuz?</div>
+                    <div class="option"><label><input type="radio" name="s5" value="0"> Hiç</label></div>
+                    <div class="option"><label><input type="radio" name="s5" value="1"> Hafif</label></div>
+                    <div class="option"><label><input type="radio" name="s5" value="2"> Orta</label></div>
+                    <div class="option"><label><input type="radio" name="s5" value="3"> Şiddetli</label></div>
+                    <div class="option"><label><input type="radio" name="s5" value="4"> Aşırı</label></div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>S2: Ağrı</h2>
+                <p class="note">Aşağıdaki aktiviteler sırasında ne kadar kalça ağrınız olduğunu belirtiniz.</p>
+
+                <div class="question-group">
+                    <div class="question">P1. Kalçanızı tam olarak bükerken (örn. dizinizi göğsünüze çekerken)</div>
+                    <div class="option"><label><input type="radio" name="p1" value="0"> Hiç</label></div>
+                    <div class="option"><label><input type="radio" name="p1" value="1"> Hafif</label></div>
+                    <div class="option"><label><input type="radio" name="p1" value="2"> Orta</label></div>
+                    <div class="option"><label><input type="radio" name="p1" value="3"> Şiddetli</label></div>
+                    <div class="option"><label><input type="radio" name="p1" value="4"> Aşırı</label></div>
+                </div>
+                <div class="question-group">
+                    <div class="question">P2. Düz zeminde yürürken</div>
+                    <div class="option"><label><input type="radio" name="p2" value="0"> Hiç</label></div>
+                    <div class="option"><label><input type="radio" name="p2" value="1"> Hafif</label></div>
+                    <div class="option"><label><input type="radio" name="p2" value="2"> Orta</label></div>
+                    <div class="option"><label><input type="radio" name="p2" value="3"> Şiddetli</label></div>
+                    <div class="option"><label><input type="radio" name="p2" value="4"> Aşırı</label></div>
+                </div>
+                <div class="question-group">
+                    <div class="question">P3. Merdiven inip çıkarken</div>
+                    <div class="option"><label><input type="radio" name="p3" value="0"> Hiç</label></div>
+                    <div class="option"><label><input type="radio" name="p3" value="1"> Hafif</label></div>
+                    <div class="option"><label><input type="radio" name="p3" value="2"> Orta</label></div>
+                    <div class="option"><label><input type="radio" name="p3" value="3"> Şiddetli</label></div>
+                    <div class="option"><label><input type="radio" name="p3" value="4"> Aşırı</label></div>
+                </div>
+                <div class="question-group">
+                    <div class="question">P4. Gece yatakta yatarken (kalçanızın pozisyonuna bağlı olarak)</div>
+                    <div class="option"><label><input type="radio" name="p4" value="0"> Hiç</label></div>
+                    <div class="option"><label><input type="radio" name="p4" value="1"> Hafif</label></div>
+                    <div class="option"><label><input type="radio" name="p4" value="2"> Orta</label></div>
+                    <div class="option"><label><input type="radio" name="p4" value="3"> Şiddetli</label></div>
+                    <div class="option"><label><input type="radio" name="p4" value="4"> Aşırı</label></div>
+                </div>
+                <div class="question-group">
+                    <div class="question">P5. Sandalyede otururken</div>
+                    <div class="option"><label><input type="radio" name="p5" value="0"> Hiç</label></div>
+                    <div class="option"><label><input type="radio" name="p5" value="1"> Hafif</label></div>
+                    <div class="option"><label><input type="radio" name="p5" value="2"> Orta</label></div>
+                    <div class="option"><label><input type="radio" name="p5" value="3"> Şiddetli</label></div>
+                    <div class="option"><label><input type="radio" name="p5" value="4"> Aşırı</label></div>
+                </div>
+                <div class="question-group">
+                    <div class="question">P6. Ayakta dikilirken</div>
+                    <div class="option"><label><input type="radio" name="p6" value="0"> Hiç</label></div>
+                    <div class="option"><label><input type="radio" name="p6" value="1"> Hafif</label></div>
+                    <div class="option"><label><input type="radio" name="p6" value="2"> Orta</label></div>
+                    <div class="option"><label><input type="radio" name="p6" value="3"> Şiddetli</label></div>
+                    <div class="option"><label><input type="radio" name="p6" value="4"> Aşırı</label></div>
+                </div>
+                <div class="question-group">
+                    <div class="question">P7. Kalçanızı bükerek (örn. ayakkabı giyerken)</div>
+                    <div class="option"><label><input type="radio"name="p7" value="0"> Hiç</label></div>
+                    <div class="option"><label><input type="radio" name="p7" value="1"> Hafif</label></div>
+                    <div class="option"><label><input type="radio" name="p7" value="2"> Orta</label></div>
+                    <div class="option"><label><input type="radio" name="p7" value="3"> Şiddetli</label></div>
+                    <div class="option"><label><input type="radio" name="p7" value="4"> Aşırı</label></div>
+                </div>
+                <div class="question-group">
+                    <div class="question">P8. Yatakta dönerken</div>
+                    <div class="option"><label><input type="radio" name="p8" value="0"> Hiç</label></div>
+                    <div class="option"><label><input type="radio" name="p8" value="1"> Hafif</label></div>
+                    <div class="option"><label><input type="radio" name="p8" value="2"> Orta</label></div>
+                    <div class="option"><label><input type="radio" name="p8" value="3"> Şiddetli</label></div>
+                    <div class="option"><label><input type="radio" name="p8" value="4"> Aşırı</label></div>
+                </div>
+                <div class="question-group">
+                    <div class="question">P9. Kalçanızın üzerine ağırlık verirken</div>
+                    <div class="option"><label><input type="radio" name="p9" value="0"> Hiç</label></div>
+                    <div class="option"><label><input type="radio" name="p9" value="1"> Hafif</label></div>
+                    <div class="option"><label><input type="radio" name="p9" value="2"> Orta</label></div>
+                    <div class="option"><label><input type="radio" name="p9" value="3"> Şiddetli</label></div>
+                    <div class="option"><label><input type="radio" name="p9" value="4"> Aşırı</label></div>
+                </div>
+                 <div class="question-group">
+                    <div class="question">P10. Genel olarak kalça ağrınız ne düzeyde?</div>
+                    <div class="option"><label><input type="radio" name="p10" value="0"> Hiç</label></div>
+                    <div class="option"><label><input type="radio" name="p10" value="1"> Hafif</label></div>
+                    <div class="option"><label><input type="radio" name="p10" value="2"> Orta</label></div>
+                    <div class="option"><label><input type="radio" name="p10" value="3"> Şiddetli</label></div>
+                    <div class="option"><label><input type="radio" name="p10" value="4"> Aşırı</label></div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>S3: Günlük Yaşam Aktiviteleri (ADL)</h2>
+                <p class="note">Aşağıdaki günlük aktiviteler sırasında kalça sorununuz nedeniyle ne kadar zorlandığınızı belirtiniz.</p>
+
+                <div class="question-group">
+                    <div class="question">A1. Merdiven inmek</div>
+                    <div class="option"><label><input type="radio" name="a1" value="0"> Hiç</label></div>
+                    <div class="option"><label><input type="radio" name="a1" value="1"> Hafif</label></div>
+                    <div class="option"><label><input type="radio" name="a1" value="2"> Orta</label></div>
+                    <div class="option"><label><input type="radio" name="a1" value="3"> Şiddetli</label></div>
+                    <div class="option"><label><input type="radio" name="a1" value="4"> Aşırı</label></div>
+                </div>
+                <div class="question-group">
+                    <div class="question">A2. Merdiven çıkmak</div>
+                    <div class="option"><label><input type="radio" name="a2" value="0"> Hiç</label></div>
+                    <div class="option"><label><input type="radio" name="a2" value="1"> Hafif</label></div>
+                    <div class="option"><label><input type="radio" name="a2" value="2"> Orta</label></div>
+                    <div class="option"><label><input type="radio" name="a2" value="3"> Şiddetli</label></div>
+                    <div class="option"><label><input type="radio" name="a2" value="4"> Aşırı</label></div>
+                </div>
+                <div class="question-group">
+                    <div class="question">A3. Sandalyeden kalkmak</div>
+                    <div class="option"><label><input type="radio" name="a3" value="0"> Hiç</label></div>
+                    <div class="option"><label><input type="radio" name="a3" value="1"> Hafif</label></div>
+                    <div class="option"><label><input type="radio" name="a3" value="2"> Orta</label></div>
+                    <div class="option"><label><input type="radio" name="a3" value="3"> Şiddetli</label></div>
+                    <div class="option"><label><input type="radio" name="a3" value="4"> Aşırı</label></div>
+                </div>
+                <div class="question-group">
+                    <div class="question">A4. Ayakta durmak</div>
+                    <div class="option"><label><input type="radio" name="a4" value="0"> Hiç</label></div>
+                    <div class="option"><label><input type="radio" name="a4" value="1"> Hafif</label></div>
+                    <div class="option"><label><input type="radio" name="a4" value="2"> Orta</label></div>
+                    <div class="option"><label><input type="radio" name="a4" value="3"> Şiddetli</label></div>
+                    <div class="option"><label><input type="radio" name="a4" value="4"> Aşırı</label></div>
+                </div>
+                <div class="question-group">
+                    <div class="question">A5. Yatakta yatmak (ağrı, sertlik, rahatsızlık)</div>
+                    <div class="option"><label><input type="radio" name="a5" value="0"> Hiç</label></div>
+                    <div class="option"><label><input type="radio" name="a5" value="1"> Hafif</label></div>
+                    <div class="option"><label><input type="radio" name="a5" value="2"> Orta</label></div>
+                    <div class="option"><label><input type="radio" name="a5" value="3"> Şiddetli</label></div>
+                    <div class="option"><label><input type="radio" name="a5" value="4"> Aşırı</label></div>
+                </div>
+                <div class="question-group">
+                    <div class="question">A6. Arabadan inmek / arabaya binmek</div>
+                    <div class="option"><label><input type="radio" name="a6" value="0"> Hiç</label></div>
+                    <div class="option"><label><input type="radio" name="a6" value="1"> Hafif</label></div>
+                    <div class="option"><label><input type="radio" name="a6" value="2"> Orta</label></div>
+                    <div class="option"><label><input type="radio" name="a6" value="3"> Şiddetli</label></div>
+                    <div class="option"><label><input type="radio" name="a6" value="4"> Aşırı</label></div>
+                </div>
+                <div class="question-group">
+                    <div class="question">A7. Alışveriş yapmak</div>
+                    <div class="option"><label><input type="radio" name="a7" value="0"> Hiç</label></div>
+                    <div class="option"><label><input type="radio" name="a7" value="1"> Hafif</label></div>
+                    <div class="option"><label><input type="radio" name="a7" value="2"> Orta</label></div>
+                    <div class="option"><label><input type="radio" name="a7" value="3"> Şiddetli</label></div>
+                    <div class="option"><label><input type="radio" name="a7" value="4"> Aşırı</label></div>
+                </div>
+                <div class="question-group">
+                    <div class="question">A8. Çorap giymek / çıkarmak</div>
+                    <div class="option"><label><input type="radio" name="a8" value="0"> Hiç</label></div>
+                    <div class="option"><label><input type="radio" name="a8" value="1"> Hafif</label></div>
+                    <div class="option"><label><input type="radio" name="a8" value="2"> Orta</label></div>
+                    <div class="option"><label><input type="radio" name="a8" value="3"> Şiddetli</label></div>
+                    <div class="option"><label><input type="radio" name="a8" value="4"> Aşırı</label></div>
+                </div>
+                <div class="question-group">
+                    <div class="question">A9. Yataktan kalkmak</div>
+                    <div class="option"><label><input type="radio" name="a9" value="0"> Hiç</label></div>
+                    <div class="option"><label><input type="radio" name="a9" value="1"> Hafif</label></div>
+                    <div class="option"><label><input type="radio" name="a9" value="2"> Orta</label></div>
+                    <div class="option"><label><input type="radio" name="a9" value="3"> Şiddetli</label></div>
+                    <div class="option"><label><input type="radio" name="a9" value="4"> Aşırı</label></div>
+                </div>
+                <div class="question-group">
+                    <div class="question">A10. Ayakkabı giymek / çıkarmak</div>
+                    <div class="option"><label><input type="radio" name="a10" value="0"> Hiç</label></div>
+                    <div class="option"><label><input type="radio" name="a10" value="1"> Hafif</label></div>
+                    <div class="option"><label><input type="radio" name="a10" value="2"> Orta</label></div>
+                    <div class="option"><label><input type="radio" name="a10" value="3"> Şiddetli</label></div>
+                    <div class="option"><label><input type="radio" name="a10" value="4"> Aşırı</label></div>
+                </div>
+                 <div class="question-group">
+                    <div class="question">A11. Ev işleri (yer silme, cam silme vb.)</div>
+                    <div class="option"><label><input type="radio" name="a11" value="0"> Hiç</label></div>
+                    <div class="option"><label><input type="radio" name="a11" value="1"> Hafif</label></div>
+                    <div class="option"><label><input type="radio" name="a11" value="2"> Orta</label></div>
+                    <div class="option"><label><input type="radio" name="a11" value="3"> Şiddetli</label></div>
+                    <div class="option"><label><input type="radio" name="a11" value="4"> Aşırı</label></div>
+                </div>
+                <div class="question-group">
+                    <div class="question">A12. Ağır ev işleri (yatak düzeltme, ağır çanta taşıma)</div>
+                    <div class="option"><label><input type="radio" name="a12" value="0"> Hiç</label></div>
+                    <div class="option"><label><input type="radio" name="a12" value="1"> Hafif</label></div>
+                    <div class="option"><label><input type="radio" name="a12" value="2"> Orta</label></div>
+                    <div class="option"><label><input type="radio" name="a12" value="3"> Şiddetli</label></div>
+                    <div class="option"><label><input type="radio" name="a12" value="4"> Aşırı</label></div>
+                </div>
+                <div class="question-group">
+                    <div class="question">A13. Çömelmek</div>
+                    <div class="option"><label><input type="radio" name="a13" value="0"> Hiç</label></div>
+                    <div class="option"><label><input type="radio" name="a13" value="1"> Hafif</label></div>
+                    <div class="option"><label><input type="radio" name="a13" value="2"> Orta</label></div>
+                    <div class="option"><label><input type="radio" name="a13" value="3"> Şiddetli</label></div>
+                    <div class="option"><label><input type="radio" name="a13" value="4"> Aşırı</label></div>
+                </div>
+                <div class="question-group">
+                    <div class="question">A14. Küvete girmek / çıkmak</div>
+                    <div class="option"><label><input type="radio" name="a14" value="0"> Hiç</label></div>
+                    <div class="option"><label><input type="radio" name="a14" value="1"> Hafif</label></div>
+                    <div class="option"><label><input type="radio" name="a14" value="2"> Orta</label></div>
+                    <div class="option"><label><input type="radio" name="a14" value="3"> Şiddetli</label></div>
+                    <div class="option"><label><input type="radio" name="a14" value="4"> Aşırı</label></div>
+                </div>
+                <div class="question-group">
+                    <div class="question">A15. Tuvalete oturmak / kalkmak</div>
+                    <div class="option"><label><input type="radio" name="a15" value="0"> Hiç</label></div>
+                    <div class="option"><label><input type="radio" name="a15" value="1"> Hafif</label></div>
+                    <div class="option"><label><input type="radio" name="a15" value="2"> Orta</label></div>
+                    <div class="option"><label><input type="radio" name="a15" value="3"> Şiddetli</label></div>
+                    <div class="option"><label><input type="radio" name="a15" value="4"> Aşırı</label></div>
+                </div>
+                <div class="question-group">
+                    <div class="question">A16. İlk kalkışta yürüme (sertlik/ağrı)</div>
+                    <div class="option"><label><input type="radio" name="a16" value="0"> Hiç</label></div>
+                    <div class="option"><label><input type="radio" name="a16" value="1"> Hafif</label></div>
+                    <div class="option"><label><input type="radio" name="a16" value="2"> Orta</label></div>
+                    <div class="option"><label><input type="radio" name="a16" value="3"> Şiddetli</label></div>
+                    <div class="option"><label><input type="radio" name="a16" value="4"> Aşırı</label></div>
+                </div>
+                <div class="question-group">
+                    <div class="question">A17. Engebeli (bozuk) zeminde yürümek</div>
+                    <div class="option"><label><input type="radio" name="a17" value="0"> Hiç</label></div>
+                    <div class="option"><label><input type="radio" name="a17" value="1"> Hafif</label></div>
+                    <div class="option"><label><input type="radio" name="a17" value="2"> Orta</label></div>
+                    <div class="option"><label><input type="radio" name="a17" value="3"> Şiddetli</label></div>
+                    <div class="option"><label><input type="radio" name="a17" value="4"> Aşırı</label></div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>S4: Spor ve Rekreasyon (Sport/Rec)</h2>
+                <p class="note">Aşağıdaki aktiviteler sırasında kalça sorununuz nedeniyle ne kadar zorlandığınızı belirtiniz.</p>
+
+                <div class="question-group">
+                    <div class="question">SP1. Koşmak</div>
+                    <div class="option"><label><input type="radio" name="sp1" value="0"> Hiç</label></div>
+                    <div class="option"><label><input type="radio" name="sp1" value="1"> Hafif</label></div>
+                    <div class="option"><label><input type="radio" name="sp1" value="2"> Orta</label></div>
+                    <div class="option"><label><input type="radio" name="sp1" value="3"> Şiddetli</label></div>
+                    <div class="option"><label><input type="radio" name="sp1" value="4"> Aşırı</label></div>
+                </div>
+                <div class="question-group">
+                    <div class="question">SP2. Ani duruş ve dönüş (pivot) yapmak</div>
+                    <div class="option"><label><input type="radio" name="sp2" value="0"> Hiç</label></div>
+                    <div class="option"><label><input type="radio" name="sp2" value="1"> Hafif</label></div>
+                    <div class="option"><label><input type="radio" name="sp2" value="2"> Orta</label></div>
+                    <div class="option"><label><input type="radio" name="sp2" value="3"> Şiddetli</label></div>
+                    <div class="option"><label><input type="radio" name="
