@@ -458,4 +458,232 @@
                     <div class="option"><label><input type="radio" name="sp2" value="1"> Hafif</label></div>
                     <div class="option"><label><input type="radio" name="sp2" value="2"> Orta</label></div>
                     <div class="option"><label><input type="radio" name="sp2" value="3"> Şiddetli</label></div>
-                    <div class="option"><label><input type="radio" name="
+                    <div class="option"><label><input type="radio" name="sp2" value="4"> Aşırı</label></div>
+                </div>
+                <div class="question-group">
+                    <div class="question">SP3. Yana doğru (lateral) hareketler</div>
+                    <div class="option"><label><input type="radio" name="sp3" value="0"> Hiç</label></div>
+                    <div class="option"><label><input type="radio" name="sp3" value="1"> Hafif</label></div>
+                    <div class="option"><label><input type="radio" name="sp3" value="2"> Orta</label></div>
+                    <div class="option"><label><input type="radio" name="sp3" value="3"> Şiddetli</label></div>
+                    <div class="option"><label><input type="radio" name="sp3" value="4"> Aşırı</label></div>
+                </div>
+                <div class="question-group">
+                    <div class="question">SP4. Kalçanızda burkulma veya "boşalma" hissi</div>
+                    <div class="option"><label><input type="radio" name="sp4" value="0"> Hiç</label></div>
+                    <div class="option"><label><input type="radio" name="sp4" value="1"> Hafif</label></div>
+                    <div class="option"><label><input type="radio" name="sp4" value="2"> Orta</label></div>
+                    <div class="option"><label><input type="radio" name="sp4" value="3"> Şiddetli</label></div>
+                    <div class="option"><label><input type="radio" name="sp4" value="4"> Aşırı</label></div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>S5: Yaşam Kalitesi (QOL)</h2>
+                <p class="note">Bu sorular kalça sorununuzun yaşam kalitenizi nasıl etkilediği ile ilgilidir.</p>
+
+                <div class="question-group">
+                    <div class="question">Q1. Kalça sorununuzun farkında olma sıklığınız nedir?</div>
+                    <div class="option"><label><input type="radio" name="q1" value="0"> Hiç</label></div>
+                    <div class="option"><label><input type="radio" name="q1" value="1"> Ayda bir</label></div>
+                    <div class="option"><label><input type="radio" name="q1" value="2"> Haftada bir</label></div>
+                    <div class="option"><label><input type="radio" name="q1" value="3"> Günde bir</label></div>
+                    <div class="option"><label><input type="radio" name="q1" value="4"> Sürekli</label></div>
+                </div>
+                <div class="question-group">
+                    <div class="question">Q2. Kalça sorununuz nedeniyle yaşam tarzınızı ne derecede değiştirdiniz?</div>
+                    <div class="option"><label><input type="radio" name="q2" value="0"> Hiç değiştirme</label></div>
+                    <div class="option"><label><input type="radio" name="q2" value="1"> Hafif</label></div>
+                    <div class="option"><label><input type="radio" name="q2" value="2"> Orta</label></div>
+                    <div class="option"><label><input type="radio" name="q2" value="3"> Şiddetli</label></div>
+                    <div class="option"><label><input type="radio" name="q2" value="4"> Tamamen</label></div>
+                </div>
+                <div class="question-group">
+                    <div class="question">Q3. Kalça sorununuz varken ne kadar sık kalçanıza güvenebiliyorsunuz?</div>
+                    <div class="option"><label><input type="radio" name="q3" value="0"> Her zaman</label></div>
+                    <div class="option"><label><input type="radio" name="q3" value="1"> Genellikle</label></div>
+                    <div class="option"><label><input type="radio" name="q3" value="2"> Bazen</label></div>
+                    <div class="option"><label><input type="radio" name="q3" value="3"> Nadiren</label></div>
+                    <div class="option"><label><input type="radio" name="q3" value="4"> Hiçbir zaman</label></div>
+                </div>
+                <div class="question-group">
+                    <div class="question">Q4. Genel olarak, kalça sorununuz sizi ne düzeyde etkiliyor?</div>
+                    <div class="option"><label><input type="radio" name="q4" value="0"> Hiç</label></div>
+                    <div class="option"><label><input type="radio" name="q4" value="1"> Hafif</label></div>
+                    <div class="option"><label><input type="radio" name="q4" value="2"> Orta</label></div>
+                    <div class="option"><label><input type="radio" name="q4" value="3"> Şiddetli</label></div>
+                    <div class="option"><label><input type="radio" name="q4" value="4"> Aşırı</label></div>
+                </div>
+            </div>
+
+            <button type="button" id="calculateButton" onclick="calculateHOOS()">PUANLARI HESAPLA</button>
+
+            <div id="results">
+                <h2>HOOS Alt Skorları (0-100)</h2>
+                <p class="note">100 = Sorun Yok (En İyi), 0 = Aşırı Sorun (En Kötü)</p>
+                <p id="scoreSymptoms">Semptomlar: -</p>
+                <p id="scorePain">Ağrı: -</p>
+                <p id="scoreADL">Günlük Yaşam Aktiviteleri (ADL): -</p>
+                <p id="scoreSportRec">Spor ve Rekreasyon: -</p>
+                <p id="scoreQOL">Yaşam Kalitesi: -</p>
+                
+                <button type="button" id="sendToDoctorButton" onclick="sendResultsToDoctor()">
+                    Sonuçları Doktoruma WhatsApp ile Gönder
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+    <script>
+    
+        const DOKTORUN_TELEFON_NUMARASI = "905426128102"; // Sizin numaranız burada
+
+        let finalScores = {
+            symptoms: 0,
+            pain: 0,
+            adl: 0,
+            sportRec: 0,
+            qol: 0
+        };
+
+        function calculateHOOS() {
+            const form = document.getElementById('hoosForm');
+            let missingQuestions = false;
+
+            function getRadioValue(name) {
+                const radios = form.elements[name];
+                if (!radios) return -1;
+                for (let i = 0; i < radios.length; i++) {
+                    if (radios[i].checked) {
+                        return parseInt(radios[i].value, 10);
+                    }
+                }
+                return -1; // Cevaplanmamış
+            }
+
+            let sums = { symptoms: 0, pain: 0, adl: 0, sportRec: 0, qol: 0 };
+            
+            // Semptomlar (S1-S5) - 5 soru
+            for (let i = 1; i <= 5; i++) {
+                let val = getRadioValue('s' + i);
+                if (val === -1) { missingQuestions = true; } else { sums.symptoms += val; }
+            }
+
+            // Ağrı (P1-P10) - 10 soru
+            for (let i = 1; i <= 10; i++) {
+                let val = getRadioValue('p' + i);
+                if (val === -1) { missingQuestions = true; } else { sums.pain += val; }
+            }
+
+            // ADL (A1-A17) - 17 soru
+            for (let i = 1; i <= 17; i++) {
+                let val = getRadioValue('a' + i);
+                if (val === -1) { missingQuestions = true; } else { sums.adl += val; }
+            }
+
+            // Spor/Rec (SP1-SP4) - 4 soru
+            for (let i = 1; i <= 4; i++) {
+                let val = getRadioValue('sp' + i);
+                if (val === -1) { missingQuestions = true; } else { sums.sportRec += val; }
+            }
+
+            // QOL (Q1-Q4) - 4 soru
+            for (let i = 1; i <= 4; i++) {
+                let val = getRadioValue('q' + i);
+                if (val === -1) { missingQuestions = true; } else { sums.qol += val; }
+            }
+
+            if (missingQuestions) {
+                alert("Lütfen tüm 40 soruyu cevapladığınızdan emin olun.");
+                return;
+            }
+
+            // 0-100 arasına dönüştür
+            // Formül: 100 - ( (ham_toplam * 100) / (max_mümkün_ham_puan) )
+            // Max Puanlar: Symptoms=5*4=20, Pain=10*4=40, ADL=17*4=68, Sport=4*4=16, QOL=4*4=16
+            finalScores.symptoms = Math.round(100 - ((sums.symptoms * 100) / 20));
+            finalScores.pain = Math.round(100 - ((sums.pain * 100) / 40));
+            finalScores.adl = Math.round(100 - ((sums.adl * 100) / 68));
+            finalScores.sportRec = Math.round(100 - ((sums.sportRec * 100) / 16));
+            finalScores.qol = Math.round(100 - ((sums.qol * 100) / 16));
+
+
+            // Sonuçları göster
+            const resultsDiv = document.getElementById('results');
+            document.getElementById('scoreSymptoms').innerText = `Semptomlar: ${finalScores.symptoms} / 100`;
+            document.getElementById('scorePain').innerText = `Ağrı: ${finalScores.pain} / 100`;
+            document.getElementById('scoreADL').innerText = `Günlük Yaşam Aktiviteleri (ADL): ${finalScores.adl} / 100`;
+            document.getElementById('scoreSportRec').innerText = `Spor ve Rekreasyon: ${finalScores.sportRec} / 100`;
+            document.getElementById('scoreQOL').innerText = `Yaşam Kalitesi: ${finalScores.qol} / 100`;
+            
+            resultsDiv.style.display = 'block';
+            document.getElementById('sendToDoctorButton').style.display = 'block';
+            resultsDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // =================================================================
+        // ========= DETAYLI DÖKÜM İÇİN FONKSİYONLAR =======================
+        // =================================================================
+
+        function getSelectedAnswerText(name) {
+            const form = document.getElementById('hoosForm');
+            const radios = form.elements[name];
+            if (!radios) return "Soru bulunamadı";
+            
+            for (let i = 0; i < radios.length; i++) {
+                if (radios[i].checked) {
+                    return radios[i].parentElement.innerText.trim(); 
+                }
+            }
+            return "Cevaplanmadı";
+        }
+
+        function sendResultsToDoctor() {
+            if (DOKTORUN_TELEFON_NUMARASI.length < 12) {
+                alert("Form sahibi (doktor) kendi telefon numarasını koda eklememiş.");
+                return;
+            }
+
+            const form = document.getElementById('hoosForm');
+            const hastaAdi = form.elements['hasta_adi'].value;
+            const hastaSoyadi = form.elements['hasta_soyadi'].value;
+            
+            if (!hastaAdi || !hastaSoyadi) {
+                alert("Lütfen sonuçları göndermeden önce Ad ve Soyad alanlarını doldurun.");
+                return;
+            }
+
+            let message = `--- HOOS Kalça Skoru Sonucu ---\n\n`;
+            message += `Hasta Adı: *${hastaAdi} ${hastaSoyadi}*\n\n`;
+            
+            message += `--- SKOR ÖZETİ (0-100, 100=En İyi) ---\n`;
+            message += `Semptomlar: *${finalScores.symptoms} / 100*\n`;
+            message += `Ağrı: *${finalScores.pain} / 100*\n`;
+            message += `Günlük Yaşam (ADL): *${finalScores.adl} / 100*\n`;
+            message += `Spor/Rekreasyon: *${finalScores.sportRec} / 100*\n`;
+            message += `Yaşam Kalitesi (QOL): *${finalScores.qol} / 100*\n\n`;
+            
+            message += `--- DETAYLI YANIT DÖKÜMÜ ---\n\n`;
+            message += `BÖLÜM S: Semptomlar\n`;
+            for(let i=1; i<=5; i++) { message += `S${i}: ${getSelectedAnswerText('s'+i)}\n`; }
+            message += `\nBÖLÜM P: Ağrı\n`;
+            for(let i=1; i<=10; i++) { message += `P${i}: ${getSelectedAnswerText('p'+i)}\n`; }
+            message += `\nBÖLÜM A: Günlük Yaşam (ADL)\n`;
+            for(let i=1; i<=17; i++) { message += `A${i}: ${getSelectedAnswerText('a'+i)}\n`; }
+            message += `\nBÖLÜM SP: Spor ve Rekreasyon\n`;
+            for(let i=1; i<=4; i++) { message += `SP${i}: ${getSelectedAnswerText('sp'+i)}\n`; }
+            message += `\nBÖLÜM Q: Yaşam Kalitesi\n`;
+            for(let i=1; i<=4; i++) { message += `Q${i}: ${getSelectedAnswerText('q'+i)}\n`; }
+            
+            message += `\n(Bu mesaj hasta tarafından form üzerinden otomatik olarak gönderilmiştir.)`;
+
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappURL = `https://wa.me/${DOKTORUN_TELEFON_NUMARASI}?text=${encodedMessage}`;
+            
+            window.open(whatsappURL, '_blank');
+        }
+    </script>
+
+</body>
+</html>
