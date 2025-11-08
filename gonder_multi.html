@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Klinik Skor Gönderme Merkezi</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f8f9fa;
+            color: #212529;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 700px;
+            margin: 30px auto;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        h1 {
+            color: #0056b3;
+            text-align: center;
+        }
+        h2 {
+            font-size: 1.3em;
+            color: #343a40;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 10px;
+            margin-top: 25px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #495057;
+        }
+        .form-group input[type="tel"],
+        .form-group input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            font-size: 1.1em;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            box-sizing: border-box; 
+        }
+        .score-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* İki sütunlu liste */
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .score-item {
+            background-color: #fdfdfd;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 12px 15px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .score-item:hover {
+            background-color: #f1f3f5;
+        }
+        .score-item input[type="checkbox"] {
+            margin-right: 12px;
+            transform: scale(1.2);
+            cursor: pointer;
+        }
+        .score-item label {
+            font-size: 1em;
+            color: #212529;
+            cursor: pointer;
+            flex-grow: 1;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #ffffff;
+            background-color: #25D366; /* WhatsApp Yeşili */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 25px;
+        }
+        button:hover {
+            background-color: #128C7E;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Hastaya Skor Formları Gönder</h1>
+        
+        <h2>Adım 1: Hasta Bilgileri</h2>
+        <div class="form-group">
+            <label for="hasta_adi">Hastanın Adı (İsteğe bağlı):</label>
+            <input type="text" id="hasta_adi" placeholder="Örn: Ahmet Yılmaz">
+        </div>
+        <div class="form-group">
+            <label for="hasta_telefon">Hastanın WhatsApp Numarası:</label>
+            <input type="tel" id="hasta_telefon" placeholder="Örn: 5xxxxxxxxx" required>
+        </div>
+
+        <h2>Adım 2: Gönderilecek Formları Seçin</h2>
+        <div class="score-list">
+            
+            <div class="score-item">
+                <input type="checkbox" id="score_hhs_detayli" value="hhs_detayli.html" data-name="Harris Kalça Skoru (Detaylı)">
+                <label for="score_hhs_detayli">Harris Kalça Skoru (Detaylı)</label>
+            </div>
+            <div class="score-item">
+                <input type="checkbox" id="score_hhs_named" value="hhs_named.html" data-name="Harris Kalça Skoru (Basit)">
+                <label for="score_hhs_named">Harris Kalça Skoru (Basit)</label>
+            </div>
+            <div class="score-item">
+                <input type="checkbox" id="score_hoos" value="hoos.html" data-name="HOOS (Kalça)">
+                <label for="score_hoos">HOOS (Kalça)</label>
+            </div>
+            <div class="score-item">
+                <input type="checkbox" id="score_oxford_hip" value="oxford_hip.html" data-name="Oxford Kalça Skoru">
+                <label for="score_oxford_hip">Oxford Kalça Skoru</label>
+            </div>
+
+            <div class="score-item">
+                <input type="checkbox" id="score_koos" value="koos.html" data-name="KOOS (Diz)">
+                <label for="score_koos">KOOS (Diz)</label>
+            </div>
+            <div class="score-item">
+                <input type="checkbox" id="score_womac" value="womac.html" data-name="WOMAC (Diz/Kalça)">
+                <label for="score_womac">WOMAC (Diz/Kalça)</label>
+            </div>
+
+            <div class="score-item">
+                <input type="checkbox" id="score_oxford_shoulder" value="oxford_shoulder.html" data-name="Oxford Omuz Skoru">
+                <label for="score_oxford_shoulder">Oxford Omuz Skoru</label>
+            </div>
+            <div class="score-item">
+                <input type="checkbox" id="score_wosi" value="wosi.html" data-name="WOSI (Omuz İnstabilite)">
+                <label for="score_wosi">WOSI (Omuz İnstabilite)</label>
+            </div>
+
+            <div class="score-item">
+                <input type="checkbox" id="score_fadi" value="fadi.html" data-name="FADI (Ayak/Ayak Bileği)">
+                <label for="score_fadi">FADI (Ayak/Ayak Bileği)</label>
+            </div>
+
+            <div class="score-item">
+                <input type="checkbox" id="score_dash" value="dash.html" data-name="DASH (Kol/Omuz/El)">
+                <label for="score_dash">DASH (Kol/Omuz/El)</label>
+            </div>
+
+            <div class="score-item">
+                <input type="checkbox" id="score_vas" value="vas_pain.html" data-name="VAS Ağrı Skoru">
+                <label for="score_vas">VAS Ağrı Skoru</label>
+            </div>
+
+        </div>
+        
+        <button type="button" onclick="sendFormLinks()">Seçilen Formları WhatsApp ile Gönder</button>
+    </div>
+
+    <script>
+        // Sizin GitHub repo adresiniz
+        const REPO_BASE_URL = "https://iduran02.github.io/hhs_wat.tr/";
+
+        function sendFormLinks() {
+            // 1. Hasta Bilgilerini al
+            let phone = document.getElementById('hasta_telefon').value;
+            const name = document.getElementById('hasta_adi').value;
+
+            // 2. Telefonu formatla
+            if (!phone) {
+                alert("Lütfen hastanın telefon numarasını girin.");
+                return;
+            }
+            phone = phone.replace(/\s/g, ''); // Boşlukları sil
+            if (phone.startsWith('0')) {
+                phone = phone.substring(1); // Başındaki 0'ı kaldır
+            }
+            if (!phone.startsWith('90')) {
+                phone = '90' + phone; // 90 ekle
+            }
+
+            // 3. Seçilen formları bul
+            const selectedScores = [];
+            const checkboxes = document.querySelectorAll('.score-list input[type="checkbox"]:checked');
+            
+            if (checkboxes.length === 0) {
+                alert("Lütfen göndermek için en az bir form seçin.");
+                return;
+            }
+
+            checkboxes.forEach(cb => {
+                selectedScores.push({
+                    name: cb.dataset.name, // "Harris Kalça Skoru"
+                    url: REPO_BASE_URL + cb.value // "https://.../hhs_detayli.html"
+                });
+            });
+
+            // 4. WhatsApp Mesajını Oluştur
+            let message = "";
+            if (name) {
+                message = `Merhaba ${name} Hanım/Bey,\n\n`;
+            } else {
+                message = `Merhaba,\n\n`;
+            }
+            
+            message += `Durumunuzu değerlendirmek için lütfen aşağıdaki linklerde bulunan formu/formları doldurunuz:\n\n`;
+            
+            // Seçilen her form için bir link ekle
+            selectedScores.forEach(score => {
+                message += `*${score.name}*:\n`;
+                message += `${score.url}\n\n`;
+            });
+
+            message += `Sağlıklı günler dilerim.`;
+
+            // 5. WhatsApp linkini oluştur ve aç
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappURL = `https://wa.me/${phone}?text=${encodedMessage}`;
+            
+            window.open(whatsappURL, '_blank');
+        }
+    </script>
+
+</body>
+</html>
