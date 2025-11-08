@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oxford Shoulder Score (OSS)</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f8f9fa;
+            color: #212529;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 25px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        h1, h2 {
+            color: #0056b3;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 10px;
+        }
+        h2 {
+            font-size: 1.5em;
+            margin-top: 30px;
+        }
+        .section {
+            margin-bottom: 25px;
+            background-color: #fdfdfd;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #495057;
+        }
+        .form-group input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            box-sizing: border-box; 
+        }
+        
+        .question-group {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #f1f3f5;
+            padding-bottom: 15px;
+        }
+        .question {
+            font-weight: bold;
+            color: #343a40;
+            margin-bottom: 10px;
+        }
+        .option {
+            margin-bottom: 5px;
+            cursor: pointer;
+            padding-left: 5px;
+        }
+        .option input[type="radio"] {
+            margin-right: 10px;
+        }
+        .option label {
+            cursor: pointer;
+            display: block;
+        }
+        .note {
+            font-size: 0.9em;
+            color: #6c757d;
+            background-color: #f1f3f5;
+            padding: 10px;
+            border-radius: 4px;
+            border-left: 3px solid #0056b3;
+            margin-bottom: 15px;
+        }
+        
+        button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        #calculateButton {
+            background-color: #007bff;
+        }
+        #calculateButton:hover {
+            background-color: #0056b3;
+        }
+        
+        #sendToDoctorButton {
+            background-color: #25D366; /* WhatsApp Yeşili */
+            margin-top: 15px;
+            display: none; /* Başlangıçta gizli */
+        }
+        #sendToDoctorButton:hover {
+            background-color: #128C7E;
+        }
+        
+        #results {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #e6f7ff;
+            border: 1px solid #b3e0ff;
+            border-radius: 5px;
+            text-align: center;
+            display: none; /* Başlangıçta gizli */
+        }
+        #results h2 {
+            margin-top: 0;
+            font-size: 1.8em;
+        }
+        #results p {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #004085;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Oxford Omuz Skoru (OSS)</h1>
+        <p class="note">Lütfen son 4 hafta içinde omzunuzla ilgili yaşadıklarınızı en iyi tanımlayan seçeneği işaretleyin.</p>
+
+        <form id="ossForm" onsubmit="return false;">
+
+            <div class="section">
+                <h2>Hasta Bilgileri</h2>
+                <div class="form-group">
+                    <label for="hasta_adi">Adınız:</label>
+                    <input type="text" id="hasta_adi" name="hasta_adi" required>
+                </div>
+                <div class="form-group">
+                    <label for="hasta_soyadi">Soyadınız:</label>
+                    <input type="text" id="hasta_soyadi" name="hasta_soyadi" required>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>BÖLÜM 1: 12 Soru</h2>
+                
+                <div class="question-group">
+                    <div class="question">1. Omzunuzdaki en kötü ağrıyı nasıl tanımlarsınız?</div>
+                    <div class="option"><label><input type="radio" name="q1" value="4"> (4) Hiç</label></div>
+                    <div class="option"><label><input type="radio" name="q1" value="3"> (3) Hafif</label></div>
+                    <div class="option"><label><input type="radio" name="q1" value="2"> (2) Orta</label></div>
+                    <div class="option"><label><input type="radio" name="q1" value="1"> (1) Şiddetli</label></div>
+                    <div class="option"><label><input type="radio" name="q1" value="0"> (0) Dayanılmaz</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">2. Omzunuz nedeniyle giyinirken sorun yaşadınız mı?</div>
+                    <div class="option"><label><input type="radio" name="q2" value="4"> (4) Hiç sorun yok</label></div>
+                    <div class="option"><label><input type="radio" name="q2" value="3"> (3) Biraz zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="q2" value="2"> (2) Orta zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="q2" value="1"> (1) Aşırı zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="q2" value="0"> (0) İmkansız</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">3. Omzunuz nedeniyle arabaya inip binmede veya toplu taşımada sorun yaşadınız mı?</div>
+                    <div class="option"><label><input type="radio" name="q3" value="4"> (4) Hiç sorun yok</label></div>
+                    <div class="option"><label><input type="radio" name="q3" value="3"> (3) Biraz zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="q3" value="2"> (2) Orta zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="q3" value="1"> (1) Aşırı zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="q3" value="0"> (0) İmkansız</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">4. Bıçak ve çatalı aynı anda kullanabildiniz mi?</div>
+                    <div class="option"><label><input type="radio" name="q4" value="4"> (4) Evet, kolaylıkla</labe></div>
+                    <div class="option"><label><input type="radio" name="q4" value="3"> (3) Biraz zorlukla</label></div>
+                    <div class="option"><label><input type="radio" name="q4" value="2"> (2) Orta zorlukla</label></div>
+                    <div class="option"><label><input type="radio" name="q4" value="1"> (1) Aşırı zorlukla</label></div>
+                    <div class="option"><label><input type="radio" name="q4" value="0"> (0) Hayır, imkansız</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">5. Ev alışverişini tek başınıza yapabildiniz mi?</div>
+                    <div class="option"><label><input type="radio" name="q5" value="4"> (4) Evet, kolaylıkla</label></div>
+                    <div class="option"><label><input type="radio" name="q5" value="3"> (3) Biraz zorlukla</label></div>
+                    <div class="option"><label><input type="radio" name="q5" value="2"> (2) Orta zorlukla</label></div>
+                    <div class="option"><label><input type="radio" name="q5" value="1"> (1) Aşırı zorlukla</label></div>
+                    <div class="option"><label><input type="radio" name="q5" value="0"> (0) Hayır, imkansız</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">6. İçinde yemek tabağı olan bir tepsiyi oda boyunca taşıyabildiniz mi?</div>
+                    <div class="option"><label><input type="radio" name="q6" value="4"> (4) Evet, kolaylıkla</label></div>
+                    <div class="option"><label><input type="radio" name="q6" value="3"> (3) Biraz zorlukla</label></div>
+                    <div class="option"><label><input type="radio" name="q6" value="2"> (2) Orta zorlukla</label></div>
+                    <div class="option"><label><input type="radio" name="q6" value="1"> (1) Aşırı zorlukla</label></div>
+                    <div class="option"><label><input type="radio" name="q6" value="0"> (0) Hayır, imkansız</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">7. Etkilenen kolunuzla saçınızı tarayabildiniz mi?</div>
+                    <div class="option"><label><input type="radio" name="q7" value="4"> (4) Evet, kolaylıkla</label></div>
+                    <div class="option"><label><input type="radio" name="q7" value="3"> (3) Biraz zorlukla</label></div>
+                    <div class="option"><label><input type="radio" name="q7" value="2"> (2) Orta zorlukla</label></div>
+                    <div class="option"><label><input type="radio" name="q7" value="1"> (1) Aşırı zorlukla</label></div>
+                    <div class="option"><label><input type="radio" name="q7" value="0"> (0) Hayır, imkansız</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">8. Omzunuzdaki "olağan" ağrıyı nasıl tanımlarsınız?</div>
+                    <div class="option"><label><input type="radio" name="q8" value="4"> (4) Hiç</label></div>
+                    <div class="option"><label><input type="radio" name="q8" value="3"> (3) Çok hafif</label></div>
+                    <div class="option"><label><input type="radio" name="q8" value="2"> (2) Hafif</label></div>
+                    <div class="option"><label><input type="radio" name="q8" value="1"> (1) Orta</label></div>
+                    <div class="option"><label><input type="radio" name="q8" value="0"> (0) Şiddetli</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">9. Etkilenen kolunuzu kullanarak giysilerinizi gardıroba asabildiniz mi?</div>
+                    <div class="option"><label><input type="radio" name="q9" value="4"> (4) Evet, kolaylıkla</label></div>
+                    <div class="option"><label><input type="radio" name="q9" value="3"> (3) Biraz zorlukla</label></div>
+                    <div class="option"><label><input type="radio" name="q9" value="2"> (2) Orta zorlukla</label></div>
+                    <div class="option"><label><input type="radio" name="q9" value="1"> (1) Büyük zorlukla</label></div>
+                    <div class="option"><label><input type="radio" name="q9" value="0"> (0) Hayır, imkansız</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">10. Her iki koltuk altınızı yıkayıp kurutabildiniz mi?</div>
+                    <div class="option"><label><input type="radio" name="q10" value="4"> (4) Evet, kolaylıkla</label></div>
+                    <div class="option"><label><input type="radio" name="q10" value="3"> (3) Biraz zorlukla</label></div>
+                    <div class="option"><label><input type="radio" name="q10" value="2"> (2) Orta zorlukla</label></div>
+                    <div class="option"><label><input type="radio" name="q10" value="1"> (1) Aşırı zorlukla</label></div>
+                    <div class="option"><label><input type="radio" name="q10" value="0"> (0) Hayır, imkansız</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">11. Omzunuzdaki ağrı nedeniyle gece uykunuzda sorun yaşadınız mı?</div>
+                    <div class="option"><label><input type="radio" name="q11" value="4"> (4) Hiç sorun yaşamadım</label></div>
+                    <div class="option"><label><input type="radio" name="q11" value="3"> (3) Sadece 1 veya 2 gece</label></div>
+                    <div class="option"><label><input type="radio" name="q11" value="2"> (2) Bazı geceler</label></div>
+                    <div class="option"><label><input type="radio" name="q11" value="1"> (1) Çoğu gece</label></div>
+                    <div class="option"><label><input type="radio" name="q11" value="0"> (0) Her gece</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">12. Omzunuz nedeniyle ne kadar rahatsızlık hissettiniz (örn. ani takılma, ağrı)?</div>
+                    <div class="option"><label><input type="radio" name="q12" value="4"> (4) Hiç hissetmedim</label></div>
+                    <div class="option"><label><input type="radio" name="q12" value="3"> (3) Ara sıra</label></div>
+                    <div class="option"><label><input type="radio" name="q12" value="2"> (2) Bazen</label></div>
+                    <div class="option"><label><input type="radio" name="q12" value="1"> (1) Sık sık</label></div>
+                    <div class="option"><label><input type="radio" name="q12" value="0"> (0) Her zaman</label></div>
+                </div>
+
+            </div>
+
+            <button type="button" id="calculateButton" onclick="calculateOSS()">SKORU HESAPLA</button>
+
+            <div id="results">
+                <h2>Oxford Omuz Skoru</h2>
+                <p id="totalScore">Toplam Puan: 0 / 48</p>
+                <p class="note" style="text-align: left; font-size: 1em;">
+                    <b>48 Puan = En İyi Sonuç</b> (Sorun Yok)<br>
+                    <b>0 Puan = En Kötü Sonuç</b> (Aşırı Sorun)
+                </p>
+                
+                <button type="button" id="sendToDoctorButton" onclick="sendResultsToDoctor()">
+                    Sonuçları Doktoruma WhatsApp ile Gönder
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+    <script>
+    
+        const DOKTORUN_TELEFON_NUMARASI = "905426128102"; // Sizin numaranız burada
+        let finalScore = 0; // Skoru global tutalım
+
+        function calculateOSS() {
+            const form = document.getElementById('ossForm');
+            let totalScore = 0;
+            let questionsAnswered = 0;
+
+            function getRadioValue(name) {
+                const radios = form.elements[name];
+                if (!radios) return -1; 
+                for (let i = 0; i < radios.length; i++) {
+                    if (radios[i].checked) {
+                        return parseInt(radios[i].value, 10);
+                    }
+                }
+                return -1; // Cevaplanmamış
+            }
+
+            // 12 sorunun puanını topla
+            for (let i = 1; i <= 12; i++) {
+                let val = getRadioValue('q' + i);
+                if (val !== -1) {
+                    totalScore += val;
+                    questionsAnswered++;
+                }
+            }
+
+            if (questionsAnswered < 12) {
+                alert("Lütfen 12 sorunun tamamını cevapladığınızdan emin olun.");
+                return;
+            }
+
+            finalScore = totalScore; // Global değişkene ata
+
+            // Sonuçları göster
+            const resultsDiv = document.getElementById('results');
+            document.getElementById('totalScore').innerText = `Toplam Puan: ${finalScore} / 48`;
+            
+            resultsDiv.style.display = 'block';
+            document.getElementById('sendToDoctorButton').style.display = 'block';
+            resultsDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // =================================================================
+        // ========= DETAYLI DÖKÜM İÇİN FONKSİYONLAR =======================
+        // =================================================================
+
+        function getSelectedAnswerText(name) {
+            const form = document.getElementById('ossForm');
+            const radios = form.elements[name];
+            if (!radios) return "Soru bulunamadı";
+            
+            for (let i = 0; i < radios.length; i++) {
+                if (radios[i].checked) {
+                    return radios[i].parentElement.innerText.trim(); 
+                }
+            }
+            return "Cevaplanmadı";
+        }
+
+        function sendResultsToDoctor() {
+            if (DOKTORUN_TELEFON_NUMARASI.length < 12) {
+                alert("Form sahibi (doktor) kendi telefon numarasını koda eklememiş.");
+                return;
+            }
+
+            const form = document.getElementById('ossForm');
+            const hastaAdi = form.elements['hasta_adi'].value;
+            const hastaSoyadi = form.elements['hasta_soyadi'].value;
+            
+            if (!hastaAdi || !hastaSoyadi) {
+                alert("Lütfen sonuçları göndermeden önce Ad ve Soyad alanlarını doldurun.");
+                return;
+            }
+
+            // 3. WhatsApp mesajını (DETAYLI DÖKÜM İLE) oluştur
+            let message = `--- Oxford Omuz Skoru (OSS) Sonucu ---\n\n`;
+            message += `Hasta Adı: *${hastaAdi} ${hastaSoyadi}*\n\n`;
+            
+            message += `--- SKOR ÖZETİ (48 = En İyi) ---\n`;
+            message += `Toplam Puan: *${finalScore} / 48*\n\n`;
+            
+            message += `--- DETAYLI YANIT DÖKÜMÜ ---\n`;
+            message += `1 (En kötü ağrı): ${getSelectedAnswerText('q1')}\n`;
+            message += `2 (Giyinme): ${getSelectedAnswerText('q2')}\n`;
+            message += `3 (Taşıt): ${getSelectedAnswerText('q3')}\n`;
+            message += `4 (Bıçak/Çatal): ${getSelectedAnswerText('q4')}\n`;
+            message += `5 (Alışveriş): ${getSelectedAnswerText('q5')}\n`;
+            message += `6 (Tepsi taşıma): ${getSelectedAnswerText('q6')}\n`;
+            message += `7 (Saç tarama): ${getSelectedAnswerText('q7')}\n`;
+            message += `8 (Olağan ağrı): ${getSelectedAnswerText('q8')}\n`;
+            message += `9 (Giysi asma): ${getSelectedAnswerText('q9')}\n`;
+            message += `10 (Koltuk altı): ${getSelectedAnswerText('q10')}\n`;
+            message += `11 (Gece ağrısı): ${getSelectedAnswerText('q11')}\n`;
+            message += `12 (Rahatsızlık): ${getSelectedAnswerText('q12')}\n\n`;
+            
+            message += `(Bu mesaj hasta tarafından form üzerinden otomatik olarak gönderilmiştir.)`;
+
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappURL = `https://wa.me/${DOKTORUN_TELEFON_NUMARASI}?text=${encodedMessage}`;
+            
+            window.open(whatsappURL, '_blank');
+        }
+    </script>
+
+</body>
+</html>
