@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FADI Ayak & Ayak Bileği Skoru</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f8f9fa;
+            color: #212529;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 25px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        h1, h2 {
+            color: #0056b3;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 10px;
+        }
+        h2 {
+            font-size: 1.5em;
+            margin-top: 30px;
+        }
+        h3 {
+            font-size: 1.2em;
+            color: #343a40;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+        .section {
+            margin-bottom: 25px;
+            background-color: #fdfdfd;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #495057;
+        }
+        .form-group input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            box-sizing: border-box; 
+        }
+        
+        .question-group {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #f1f3f5;
+            padding-bottom: 15px;
+        }
+        .question {
+            font-weight: bold;
+            color: #343a40;
+            margin-bottom: 10px;
+        }
+        .option {
+            margin-bottom: 5px;
+            cursor: pointer;
+            padding-left: 5px;
+        }
+        .option input[type="radio"] {
+            margin-right: 10px;
+        }
+        .option label {
+            cursor: pointer;
+            display: block; /* Tıklama alanını genişlet */
+        }
+        .note {
+            font-size: 0.9em;
+            color: #6c757d;
+            background-color: #f1f3f5;
+            padding: 10px;
+            border-radius: 4px;
+            border-left: 3px solid #0056b3;
+            margin-bottom: 15px;
+        }
+        
+        button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        #calculateButton {
+            background-color: #007bff;
+        }
+        #calculateButton:hover {
+            background-color: #0056b3;
+        }
+        
+        #sendToDoctorButton {
+            background-color: #25D366; /* WhatsApp Yeşili */
+            margin-top: 15px;
+            display: none; /* Başlangıçta gizli */
+        }
+        #sendToDoctorButton:hover {
+            background-color: #128C7E;
+        }
+        
+        #results {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #e6f7ff;
+            border: 1px solid #b3e0ff;
+            border-radius: 5px;
+            text-align: left;
+            display: none; /* Başlangıçta gizli */
+        }
+        #results h2 {
+            margin-top: 0;
+            text-align: center;
+            font-size: 1.8em;
+        }
+        #results p {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #004085;
+            border-bottom: 1px solid #b3e0ff;
+            padding-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>FADI (Ayak ve Ayak Bileği Yetersizlik İndeksi)</h1>
+        <p class="note">Aşağıdaki sorular, son bir hafta içinde ayak veya ayak bileğinizle ilgili yaşadığınız zorluklarla ilgilidir. Lütfen her soruya en uygun tek cevabı işaretleyin.</p>
+
+        <form id="fadiForm" onsubmit="return false;">
+
+            <div class="section">
+                <h2>Hasta Bilgileri</h2>
+                <div class="form-group">
+                    <label for="hasta_adi">Adınız:</label>
+                    <input type="text" id="hasta_adi" name="hasta_adi" required>
+                </div>
+                <div class="form-group">
+                    <label for="hasta_soyadi">Soyadınız:</label>
+                    <input type="text" id="hasta_soyadi" name="hasta_soyadi" required>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>BÖLÜM 1: FADI (Aktiviteler ve Ağrı)</h2>
+                <p class="note">Ayak veya ayak bileğiniz nedeniyle, aşağıdaki aktivitelerde ne kadar zorlanıyorsunuz?</p>
+
+                <h3>Aktiviteler</h3>
+                <div class="question-group">
+                    <div class="question">1. Ayakta durmak</div>
+                    <div class="option"><label><input type="radio" name="a1" value="4"> (4) Hiç zorluk yok</label></div>
+                    <div class="option"><label><input type="radio" name="a1" value="3"> (3) Hafif zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a1" value="2"> (2) Orta zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a1" value="1"> (1) Çok şiddetli zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a1" value="0"> (0) Yapamıyorum</label></div>
+                </div>
+                
+                <div class="question-group">
+                    <div class="question">2. Düz zeminde yürümek</div>
+                    <div class="option"><label><input type="radio" name="a2" value="4"> (4) Hiç zorluk yok</label></div>
+                    <div class="option"><label><input type="radio" name="a2" value="3"> (3) Hafif zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a2" value="2"> (2) Orta zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a2" value="1"> (1) Çok şiddetli zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a2" value="0"> (0) Yapamıyorum</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">3. Ayakkabısız düz zeminde yürümek</div>
+                    <div class="option"><label><input type="radio" name="a3" value="4"> (4) Hiç zorluk yok</label></div>
+                    <div class="option"><label><input type="radio" name="a3" value="3"> (3) Hafif zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a3" value="2"> (2) Orta zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a3" value="1"> (1) Çok şiddetli zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a3" value="0"> (0) Yapamıyorum</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">4. Yokuş yukarı yürümek</div>
+                    <div class="option"><label><input type="radio" name="a4" value="4"> (4) Hiç zorluk yok</label></div>
+                    <div class="option"><label><input type="radio" name="a4" value="3"> (3) Hafif zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a4" value="2"> (2) Orta zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a4" value="1"> (1) Çok şiddetli zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a4" value="0"> (0) Yapamıyorum</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">5. Yokuş aşağı yürümek</div>
+                    <div class="option"><label><input type="radio" name="a5" value="4"> (4) Hiç zorluk yok</label></div>
+                    <div class="option"><label><input type="radio" name="a5" value="3"> (3) Hafif zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a5" value="2"> (2) Orta zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a5" value="1"> (1) Çok şiddetli zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a5" value="0"> (0) Yapamıyorum</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">6. Merdiven çıkmak</div>
+                    <div class="option"><label><input type="radio" name="a6" value="4"> (4) Hiç zorluk yok</label></div>
+                    <div class="option"><label><input type="radio" name="a6" value="3"> (3) Hafif zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a6" value="2"> (2) Orta zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a6" value="1"> (1) Çok şiddetli zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a6" value="0"> (0) Yapamıyorum</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">7. Merdiven inmek</div>
+                    <div class="option"><label><input type="radio" name="a7" value="4"> (4) Hiç zorluk yok</label></div>
+                    <div class="option"><label><input type="radio" name="a7" value="3"> (3) Hafif zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a7" value="2"> (2) Orta zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a7" value="1"> (1) Çok şiddetli zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a7" value="0"> (0) Yapamıyorum</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">8. Engebeli (bozuk) zeminde yürümek</div>
+                    <div class="option"><label><input type="radio" name="a8" value="4"> (4) Hiç zorluk yok</label></div>
+                    <div class="option"><label><input type="radio" name="a8" value="3"> (3) Hafif zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a8" value="2"> (2) Orta zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a8" value="1"> (1) Çok şiddetli zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a8" value="0"> (0) Yapamıyorum</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">9. Kaldırıma inip çıkmak</div>
+                    <div class="option"><label><input type="radio" name="a9" value="4"> (4) Hiç zorluk yok</label></div>
+                    <div class="option"><label><input type="radio" name="a9" value="3"> (3) Hafif zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a9" value="2"> (2) Orta zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a9" value="1"> (1) Çok şiddetli zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a9" value="0"> (0) Yapamıyorum</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">10. Çömelmek</div>
+                    <div class="option"><label><input type="radio" name="a10" value="4"> (4) Hiç zorluk yok</label></div>
+                    <div class="option"><label><input type="radio" name="a10" value="3"> (3) Hafif zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a10" value="2"> (2) Orta zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a10" value="1"> (1) Çok şiddetli zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a10" value="0"> (0) Yapamıyorum</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">11. Uyumak</div>
+                    <div class="option"><label><input type="radio" name="a11" value="4"> (4) Hiç zorluk yok</label></div>
+                    <div class="option"><label><input type="radio" name="a11" value="3"> (3) Hafif zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a11" value="2"> (2) Orta zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a11" value="1"> (1) Çok şiddetli zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a11" value="0"> (0) Yapamıyorum</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">12. Parmak uçlarına yükselmek</div>
+                    <div class="option"><label><input type="radio" name="a12" value="4"> (4) Hiç zorluk yok</label></div>
+                    <div class="option"><label><input type="radio" name="a12" value="3"> (3) Hafif zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a12" value="2"> (2) Orta zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a12" value="1"> (1) Çok şiddetli zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a12" value="0"> (0) Yapamıyorum</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">13. İlk kalkışta yürümek</div>
+                    <div class="option"><label><input type="radio" name="a13" value="4"> (4) Hiç zorluk yok</label></div>
+                    <div class="option"><label><input type="radio" name="a13" value="3"> (3) Hafif zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a13" value="2"> (2) Orta zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a13" value="1"> (1) Çok şiddetli zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a13" value="0"> (0) Yapamıyorum</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">14. 5 dakika veya daha az yürümek</div>
+                    <div class="option"><label><input type="radio" name="a14" value="4"> (4) Hiç zorluk yok</label></div>
+                    <div class="option"><label><input type="radio" name="a14" value="3"> (3) Hafif zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a14" value="2"> (2) Orta zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a14" value="1"> (1) Çok şiddetli zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a14" value="0"> (0) Yapamıyorum</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">15. Yaklaşık 10 dakika yürümek</div>
+                    <div class="option"><label><input type="radio" name="a15" value="4"> (4) Hiç zorluk yok</label></div>
+                    <div class="option"><label><input type="radio" name="a15" value="3"> (3) Hafif zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a15" value="2"> (2) Orta zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a15" value="1"> (1) Çok şiddetli zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a15" value="0"> (0) Yapamıyorum</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">16. 15 dakika veya daha fazla yürümek</div>
+                    <div class="option"><label><input type="radio" name="a16" value="4"> (4) Hiç zorluk yok</label></div>
+                    <div class="option"><label><input type="radio" name="a16" value="3"> (3) Hafif zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a16" value="2"> (2) Orta zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a16" value="1"> (1) Çok şiddetli zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a16" value="0"> (0) Yapamıyorum</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">17. Evdeki sorumluluklar (ev işleri)</div>
+                    <div class="option"><label><input type="radio" name="a17" value="4"> (4) Hiç zorluk yok</label></div>
+                    <div class="option"><label><input type="radio" name="a17" value="3"> (3) Hafif zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a17" value="2"> (2) Orta zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a17" value="1"> (1) Çok şiddetli zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a17" value="0"> (0) Yapamıyorum</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">18. Günlük yaşam aktiviteleri</div>
+                    <div class="option"><label><input type="radio" name="a18" value="4"> (4) Hiç zorluk yok</label></div>
+                    <div class="option"><label><input type="radio" name="a18" value="3"> (3) Hafif zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a18" value="2"> (2) Orta zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a18" value="1"> (1) Çok şiddetli zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a18" value="0"> (0) Yapamıyorum</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">19. Kişisel bakım (banyo, giyinme)</div>
+                    <div class="option"><label><input type="radio" name="a19" value="4"> (4) Hiç zorluk yok</label></div>
+                    <div class="option"><label><input type="radio" name="a19" value="3"> (3) Hafif zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a19" value="2"> (2) Orta zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a19" value="1"> (1) Çok şiddetli zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a19" value="0"> (0) Yapamıyorum</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">20. Hafif-orta işler (ayakta durma, yürüme)</div>
+                    <div class="option"><label><input type="radio" name="a20" value="4"> (4) Hiç zorluk yok</label></div>
+                    <div class="option"><label><input type="radio" name="a20" value="3"> (3) Hafif zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a20" value="2"> (2) Orta zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a20" value="1"> (1) Çok şiddetli zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a20" value="0"> (0) Yapamıyorum</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">21. Ağır işler (itme, çekme, tırmanma, taşıma)</div>
+                    <div class="option"><label><input type="radio" name="a21" value="4"> (4) Hiç zorluk yok</label></div>
+                    <div class="option"><label><input type="radio" name="a21" value="3"> (3) Hafif zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a21" value="2"> (2) Orta zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a21" value="1"> (1) Çok şiddetli zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a21" value="0"> (0) Yapamıyorum</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">22. Rekreasyonel (eğlence/hobi) aktiviteler</div>
+                    <div class="option"><label><input type="radio" name="a22" value="4"> (4) Hiç zorluk yok</label></div>
+                    <div class="option"><label><input type="radio" name="a22" value="3"> (3) Hafif zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a22" value="2"> (2) Orta zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a22" value="1"> (1) Çok şiddetli zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="a22" value="0"> (0) Yapamıyorum</label></div>
+                </div>
+
+                <h3>Ağrı</h3>
+                <p class="note">Ayak veya ayak bileğinizle ilgili ağrı seviyeniz nedir?</p>
+
+                <div class="question-group">
+                    <div class="question">23. Genel ağrı seviyeniz</div>
+                    <div class="option"><label><input type="radio" name="p1" value="4"> (4) Hiç ağrı yok</label></div>
+                    <div class="option"><label><input type="radio" name="p1" value="3"> (3) Hafif ağrı</label></div>
+                    <div class="option"><label><input type="radio" name="p1" value="2"> (2) Orta ağrı</label></div>
+                    <div class="option"><label><input type="radio" name="p1" value="1"> (1) Şiddetli ağrı</label></div>
+                    <div class="option"><label><input type="radio" name="p1" value="0"> (0) Dayanılmaz ağrı</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">24. İstirahatteyken ağrı</div>
+                    <div class="option"><label><input type="radio" name="p2" value="4"> (4) Hiç ağrı yok</label></div>
+                    <div class="option"><label><input type="radio" name="p2" value="3"> (3) Hafif ağrı</label></div>
+                    <div class="option"><label><input type="radio" name="p2" value="2"> (2) Orta ağrı</label></div>
+                    <div class="option"><label><input type="radio" name="p2" value="1"> (1) Şiddetli ağrı</label></div>
+                    <div class="option"><label><input type="radio" name="p2" value="0"> (0) Dayanılmaz ağrı</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">25. Normal aktiviteniz sırasında ağrı</div>
+                    <div class="option"><label><input type="radio" name="p3" value="4"> (4) Hiç ağrı yok</label></div>
+                    <div class="option"><label><input type="radio" name="p3" value="3"> (3) Hafif ağrı</label></div>
+                    <div class="option"><label><input type="radio" name="p3" value="2"> (2) Orta ağrı</label></div>
+                    <div class="option"><label><input type="radio" name="p3" value="1"> (1) Şiddetli ağrı</label></div>
+                    <div class="option"><label><input type="radio" name="p3" value="0"> (0) Dayanılmaz ağrı</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">26. Sabah ilk kalktığınızda ağrı</div>
+                    <div class="option"><label><input type="radio" name="p4" value="4"> (4) Hiç ağrı yok</label></div>
+                    <div class="option"><label><input type="radio" name="p4" value="3"> (3) Hafif ağrı</label></div>
+                    <div class="option"><label><input type="radio" name="p4" value="2"> (2) Orta ağrı</label></div>
+                    <div class="option"><label><input type="radio" name="p4" value="1"> (1) Şiddetli ağrı</label></div>
+                    <div class="option"><label><input type="radio" name="p4" value="0"> (0) Dayanılmaz ağrı</label></div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>BÖLÜM 2: FADI Sport</h2>
+                <p class="note">Sadece yüksek düzeyde aktifseniz veya spor yapıyorsanız bu bölümü doldurun. Ayak veya ayak bileğiniz nedeniyle, aşağıdaki aktivitelerde ne kadar zorlanıyorsunuz?</p>
+
+                <div class="question-group">
+                    <div class="question">SP1. Koşmak</div>
+                    <div class="option"><label><input type="radio" name="sp1" value="4"> (4) Hiç zorluk yok</label></div>
+                    <div class="option"><label><input type="radio" name="sp1" value="3"> (3) Hafif zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="sp1" value="2"> (2) Orta zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="sp1" value="1"> (1) Çok şiddetli zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="sp1" value="0"> (0) Yapamıyorum</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">SP2. Zıplamak</div>
+                    <div class="option"><label><input type="radio" name="sp2" value="4"> (4) Hiç zorluk yok</label></div>
+                    <div class="option"><label><input type="radio" name="sp2" value="3"> (3) Hafif zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="sp2" value="2"> (2) Orta zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="sp2" value="1"> (1) Çok şiddetli zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="sp2" value="0"> (0) Yapamıyorum</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">SP3. Zıplamadan sonra yere inmek (Landing)</div>
+                    <div class="option"><label><input type="radio" name="sp3" value="4"> (4) Hiç zorluk yok</label></div>
+                    <div class="option"><label><input type="radio" name="sp3" value="3"> (3) Hafif zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="sp3" value="2"> (2) Orta zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="sp3" value="1"> (1) Çok şiddetli zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="sp3" value="0"> (0) Yapamıyorum</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">SP4. Hızlı durup başlamak</div>
+                    <div class="option"><label><input type="radio" name="sp4" value="4"> (4) Hiç zorluk yok</label></div>
+                    <div class="option"><label><input type="radio" name="sp4" value="3"> (3) Hafif zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="sp4" value="2"> (2) Orta zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="sp4" value="1"> (1) Çok şiddetli zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="sp4" value="0"> (0) Yapamıyorum</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">SP5. Yana doğru (lateral) hareketler</div>
+                    <div class="option"><label><input type="radio" name="sp5" value="4"> (4) Hiç zorluk yok</label></div>
+                    <div class="option"><label><input type="radio" name="sp5" value="3"> (3) Hafif zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="sp5" value="2"> (2) Orta zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="sp5" value="1"> (1) Çok şiddetli zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="sp5" value="0"> (0) Yapamıyorum</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">SP6. Düşük tempolu aktiviteler (yürüyüş, bisiklet)</div>
+                    <div class="option"><label><input type="radio" name="sp6" value="4"> (4) Hiç zorluk yok</label></div>
+                    <div class="option"><label><input type="radio" name="sp6" value="3"> (3) Hafif zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="sp6" value="2"> (2) Orta zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="sp6" value="1"> (1) Çok şiddetli zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="sp6" value="0"> (0) Yapamıyorum</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">SP7. Normal tekniğinizle aktivite yapabilme</div>
+                    <div class="option"><label><input type="radio" name="sp7" value="4"> (4) Hiç zorluk yok</label></div>
+                    <div class="option"><label><input type="radio" name="sp7" value="3"> (3) Hafif zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="sp7" value="2"> (2) Orta zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="sp7" value="1"> (1) Çok şiddetli zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="sp7" value="0"> (0) Yapamıyorum</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">SP8. İstediğiniz spora istediğiniz süre katılabilme</div>
+                    <div class="option"><label><input type="radio" name="sp8" value="4"> (4) Hiç zorluk yok</label></div>
+                    <div class="option"><label><input type="radio" name="sp8" value="3"> (3) Hafif zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="sp8" value="2"> (2) Orta zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="sp8" value="1"> (1) Çok şiddetli zorluk</label></div>
+                    <div class="option"><label><input type="radio" name="sp8" value="0"> (0) Yapamıyorum</label></div>
+                </div>
+            </div>
+
+            <button type="button" id="calculateButton" onclick="calculateFADI()">PUANLARI HESAPLA</button>
+
+            <div id="results">
+                <h2>FADI Skorları</h2>
+                <p class="note">100% = Fonksiyon Mükemmel (Sorun Yok)<br>0% = Fonksiyon Çok Kötü (Aşırı Zorluk)</p>
+                <p id="scoreFADI">Ana FADI Skoru: -</p>
+                <p id="scoreFADISport">FADI Sport Skoru: -</p>
+                
+                <button type="button" id="sendToDoctorButton" onclick="sendResultsToDoctor()">
+                    Sonuçları Doktoruma WhatsApp ile Gönder
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+    <script>
+    
+        const DOKTORUN_TELEFON_NUMARASI = "905426128102"; // Sizin numaranız burada
+
+        let finalFadiScore = 0;
+        let finalFadiSportScore = 0;
+
+        // Bu fonksiyon, puanı resmi formüle göre hesaplar: (toplam puan / (cevaplanan soru sayısı * 4)) * 100
+        function calculateNormalizedScore(sum, count) {
+            if (count === 0) {
+                return 0; // Hiç soru cevaplanmadıysa
+            }
+            const maxPossibleScore = count * 4;
+            const percentage = (sum / maxPossibleScore) * 100;
+            return Math.round(percentage);
+        }
+
+        function calculateFADI() {
+            const form = document.getElementById('fadiForm');
+            let fadiSum = 0;
+            let fadiCount = 0;
+            let sportSum = 0;
+            let sportCount = 0;
+
+            function getRadioValue(name) {
+                const radios = form.elements[name];
+                if (!radios) return -1; 
+                for (let i = 0; i < radios.length; i++) {
+                    if (radios[i].checked) {
+                        return parseInt(radios[i].value, 10);
+                    }
+                }
+                return -1; // Cevaplanmamış
+            }
+
+            // Ana FADI (Aktivite 1-22, Ağrı 1-4 = 26 soru)
+            for (let i = 1; i <= 22; i++) {
+                let val = getRadioValue('a' + i);
+                if (val !== -1) { fadiSum += val; fadiCount++; }
+            }
+            for (let i = 1; i <= 4; i++) {
+                let val = getRadioValue('p' + i);
+                if (val !== -1) { fadiSum += val; fadiCount++; }
+            }
+
+            // FADI Sport (SP1-SP8 = 8 soru)
+            for (let i = 1; i <= 8; i++) {
+                let val = getRadioValue('sp' + i);
+                if (val !== -1) { sportSum += val; sportCount++; }
+            }
+
+            // Ana FADI'nin cevaplanıp cevaplanmadığını kontrol et
+            if (fadiCount === 0) {
+                alert("Lütfen önce BÖLÜM 1'deki soruları cevaplayın.");
+                return;
+            }
+            
+            finalFadiScore = calculateNormalizedScore(fadiSum, fadiCount);
+            let sportScoreText = "BÖLÜM 2 (Sport) cevaplanmadı.";
+            
+            // Eğer Sport soruları cevaplandıysa, onu da hesapla
+            if (sportCount > 0) {
+                finalFadiSportScore = calculateNormalizedScore(sportSum, sportCount);
+                sportScoreText = `${finalFadiSportScore}% (${sportCount}/8 soru)`;
+            } else {
+                finalFadiSportScore = 0; // Değer atanmamış olmasın
+            }
+
+            // Sonuçları göster
+            const resultsDiv = document.getElementById('results');
+            document.getElementById('scoreFADI').innerText = `Ana FADI Skoru: ${finalFadiScore}% (${fadiCount}/26 soru)`;
+            document.getElementById('scoreFADISport').innerText = `FADI Sport Skoru: ${sportScoreText}`;
+            
+            resultsDiv.style.display = 'block';
+            document.getElementById('sendToDoctorButton').style.display = 'block';
+            resultsDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // =================================================================
+        // ========= DETAYLI DÖKÜM İÇİN FONKSİYONLAR =======================
+        // =================================================================
+
+        function getSelectedAnswerText(name) {
+            const form = document.getElementById('fadiForm');
+            const radios = form.elements[name];
+            if (!radios) return "Soru bulunamadı";
+            
+            for (let i = 0; i < radios.length; i++) {
+                if (radios[i].checked) {
+                    return radios[i].parentElement.innerText.trim(); 
+                }
+            }
+            return "Cevaplanmadı";
+        }
+
+        function sendResultsToDoctor() {
+            if (DOKTORUN_TELEFON_NUMARASI.length < 12) {
+                alert("Form sahibi (doktor) kendi telefon numarasını koda eklememiş.");
+                return;
+            }
+
+            const form = document.getElementById('fadiForm');
+            const hastaAdi = form.elements['hasta_adi'].value;
+            const hastaSoyadi = form.elements['hasta_soyadi'].value;
+            
+            if (!hastaAdi || !hastaSoyadi) {
+                alert("Lütfen sonuçları göndermeden önce Ad ve Soyad alanlarını doldurun.");
+                return;
+            }
+
+            // 3. WhatsApp mesajını (DETAYLI DÖKÜM İLE) oluştur
+            let message = `--- FADI Ayak/Ayak Bileği Skoru Sonucu ---\n\n`;
+            message += `Hasta Adı: *${hastaAdi} ${hastaSoyadi}*\n\n`;
+            
+            message += `--- SKOR ÖZETİ (100% = En İyi) ---\n`;
+            message += `Ana FADI Skoru: *${document.getElementById('scoreFADI').innerText.split(': ')[1]}*\n`;
+            message += `FADI Sport Skoru: *${document.getElementById('scoreFADISport').innerText.split(': ')[1]}*\n\n`;
+            
+            message += `--- DETAYLI YANIT DÖKÜMÜ ---\n\n`;
+            message += `BÖLÜM 1: AKTİVİTELER\n`;
+            for (let i = 1; i <= 22; i++) {
+                message += `A${i}: ${getSelectedAnswerText('a' + i)}\n`;
+            }
+            
+            message += `\nBÖLÜM 1: AĞRI\n`;
+            for (let i = 1; i <= 4; i++) {
+                message += `P${i}: ${getSelectedAnswerText('p' + i)}\n`;
+            }
+
+            message += `\nBÖLÜM 2: FADI SPORT\n`;
+            for (let i = 1; i <= 8; i++) {
+                message += `SP${i}: ${getSelectedAnswerText('sp' + i)}\n`;
+            }
+            
+            message += `\n(Bu mesaj hasta tarafından form üzerinden otomatik olarak gönderilmiştir.)`;
+
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappURL = `https://wa.me/${DOKTORUN_TELEFON_NUMARASI}?text=${encodedMessage}`;
+            
+            window.open(whatsappURL, '_blank');
+        }
+    </script>
+
+</body>
+</html>
