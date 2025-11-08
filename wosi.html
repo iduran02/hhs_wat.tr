@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WOSI Omuz İnstabilite Skoru</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f8f9fa;
+            color: #212529;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 25px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        h1, h2 {
+            color: #0056b3;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 10px;
+        }
+        h2 {
+            font-size: 1.5em;
+            margin-top: 30px;
+        }
+        h3 {
+            font-size: 1.2em;
+            color: #343a40;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+        .section {
+            margin-bottom: 25px;
+            background-color: #fdfdfd;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 20px;
+        }
+        
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; color: #495057; }
+        .form-group input[type="text"] { width: 100%; padding: 10px; font-size: 1em; border: 1px solid #ced4da; border-radius: 4px; box-sizing: border-box; }
+        
+        .question-group { margin-bottom: 20px; border-bottom: 1px solid #f1f3f5; padding-bottom: 15px; }
+        .question { font-weight: bold; color: #343a40; margin-bottom: 10px; }
+        .option { margin-bottom: 5px; cursor: pointer; padding-left: 5px; }
+        .option input[type="radio"] { margin-right: 10px; }
+        .option label { cursor: pointer; display: block; }
+        .note { font-size: 0.9em; color: #6c757d; background-color: #f1f3f5; padding: 10px; border-radius: 4px; border-left: 3px solid #0056b3; margin-bottom: 15px; }
+        .scale-labels { display: flex; justify-content: space-between; font-size: 0.9em; color: #6c757d; padding: 0 10px; }
+
+        
+        button { display: block; width: 100%; padding: 15px; font-size: 1.2em; font-weight: bold; color: #ffffff; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s ease; }
+        #calculateButton { background-color: #007bff; }
+        #calculateButton:hover { background-color: #0056b3; }
+        #sendToDoctorButton { background-color: #25D366; margin-top: 15px; display: none; }
+        #sendToDoctorButton:hover { background-color: #128C7E; }
+        
+        #results {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #e6f7ff;
+            border: 1px solid #b3e0ff;
+            border-radius: 5px;
+            text-align: left;
+            display: none;
+        }
+        #results h2 { margin-top: 0; text-align: center; font-size: 1.8em; }
+        #results p { font-size: 1.2em; font-weight: bold; color: #004085; border-bottom: 1px solid #b3e0ff; padding-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>WOSI (Batı Ontario Omuz İnstabilite İndeksi)</h1>
+        <p class="note">Aşağıdaki sorular, son 1 hafta içinde omzunuzla ilgili yaşadığınız sorunlarla ilgilidir. Lütfen 0 (Hiç) ile 10 (Aşırı) arasında durumunuzu en iyi tanımlayan seçeneği işaretleyin.</p>
+
+        <form id="wosiForm" onsubmit="return false;">
+
+            <div class="section">
+                <h2>Hasta Bilgileri</h2>
+                <div class="form-group">
+                    <label for="hasta_adi">Adınız:</label>
+                    <input type="text" id="hasta_adi" name="hasta_adi" required>
+                </div>
+                <div class="form-group">
+                    <label for="hasta_soyadi">Soyadınız:</label>
+                    <input type="text" id="hasta_soyadi" name="hasta_soyadi" required>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>BÖLÜM 1: Fiziksel Semptomlar</h2>
+                <p class="note">0 = Hiç Semptom Yok, 10 = Aşırı Semptom</p>
+                
+                <div class="question-group">
+                    <div class="question">1. Baş üstü aktivitelerde omzunuzda ne kadar ağrı hissediyorsunuz?</div>
+                    <div class="scale-labels"><span>(0) Hiç Ağrı Yok</span><span>Aşırı Ağrı (10)</span></div>
+                    <div class="option">
+                        <label><input type="radio" name="q1" value="0"> 0</label> <label><input type="radio" name="q1" value="1"> 1</label> <label><input type="radio" name="q1" value="2"> 2</label> <label><input type="radio" name="q1" value="3"> 3</label> <label><input type="radio" name="q1" value="4"> 4</label> <label><input type="radio" name="q1" value="5"> 5</label> <label><input type="radio" name="q1" value="6"> 6</label> <label><input type="radio" name="q1" value="7"> 7</label> <label><input type="radio" name="q1" value="8"> 8</label> <label><input type="radio" name="q1" value="9"> 9</label> <label><input type="radio" name="q1" value="10"> 10</label>
+                    </div>
+                </div>
+                <div class="question-group">
+                    <div class="question">2. Omzunuzda ne kadar sızlama veya zonklama hissediyorsunuz?</div>
+                    <div class="scale-labels"><span>(0) Hiç Sızlama Yok</span><span>Aşırı Sızlama (10)</span></div>
+                    <div class="option">
+                        <label><input type="radio" name="q2" value="0"> 0</label> <label><input type="radio" name="q2" value="1"> 1</label> <label><input type="radio" name="q2" value="2"> 2</label> <label><input type="radio" name="q2" value="3"> 3</label> <label><input type="radio" name="q2" value="4"> 4</label> <label><input type="radio" name="q2" value="5"> 5</label> <label><input type="radio" name="q2" value="6"> 6</label> <label><input type="radio" name="q2" value="7"> 7</label> <label><input type="radio" name="q2" value="8"> 8</label> <label><input type="radio" name="q2" value="9"> 9</label> <label><input type="radio" name="q2" value="10"> 10</label>
+                    </div>
+                </div>
+                <div class="question-group">
+                    <div class="question">3. Omzunuzda ne kadar güçsüzlük veya kuvvet eksikliği hissediyorsunuz?</div>
+                    <div class="scale-labels"><span>(0) Hiç Güçsüzlük Yok</span><span>Aşırı Güçsüzlük (10)</span></div>
+                    <div class="option">
+                        <label><input type="radio" name="q3" value="0"> 0</label> <label><input type="radio" name="q3" value="1"> 1</label> <label><input type="radio" name="q3" value="2"> 2</label> <label><input type="radio" name="q3" value="3"> 3</label> <label><input type="radio" name="q3" value="4"> 4</label> <label><input type="radio" name="q3" value="5"> 5</label> <label><input type="radio" name="q3" value="6"> 6</label> <label><input type="radio" name="q3" value="7"> 7</label> <label><input type="radio" name="q3" value="8"> 8</label> <label><input type="radio" name="q3" value="9"> 9</label> <label><input type="radio" name="q3" value="10"> 10</label>
+                    </div>
+                </div>
+                <div class="question-group">
+                    <div class="question">4. Omzunuzda ne kadar yorgunluk veya dayanıklılık eksikliği hissediyorsunuz?</div>
+                    <div class="scale-labels"><span>(0) Hiç Yorgunluk Yok</span><span>Aşırı Yorgunluk (10)</span></div>
+                    <div class="option">
+                        <label><input type="radio" name="q4" value="0"> 0</label> <label><input type="radio" name="q4" value="1"> 1</label> <label><input type="radio" name="q4" value="2"> 2</label> <label><input type="radio" name="q4" value="3"> 3</label> <label><input type="radio" name="q4" value="4"> 4</label> <label><input type="radio" name="q4" value="5"> 5</label> <label><input type="radio" name="q4" value="6"> 6</label> <label><input type="radio" name="q4" value="7"> 7</label> <label><input type="radio" name="q4" value="8"> 8</label> <label><input type="radio" name="q4" value="9"> 9</label> <label><input type="radio" name="q4" value="10"> 10</label>
+                    </div>
+                </div>
+                <div class="question-group">
+                    <div class="question">5. Omzunuzda ne kadar 'tıklama', 'çıtırtı' veya 'atlama' hissediyorsunuz?</div>
+                    <div class="scale-labels"><span>(0) Hiç Yok</span><span>Aşırı Fazla (10)</span></div>
+                    <div class="option">
+                        <label><input type="radio" name="q5" value="0"> 0</label> <label><input type="radio" name="q5" value="1"> 1</label> <label><input type="radio" name="q5" value="2"> 2</label> <label><input type="radio" name="q5" value="3"> 3</label> <label><input type="radio" name="q5" value="4"> 4</label> <label><input type="radio" name="q5" value="5"> 5</label> <label><input type="radio" name="q5" value="6"> 6</label> <label><input type="radio" name="q5" value="7"> 7</label> <label><input type="radio" name="q5" value="8"> 8</label> <label><input type="radio" name="q5" value="9"> 9</label> <label><input type="radio" name="q5" value="10"> 10</label>
+                    </div>
+                </div>
+                <div class="question-group">
+                    <div class="question">6. Omzunuzda ne kadar sertlik (katılık) hissediyorsunuz?</div>
+                    <div class="scale-labels"><span>(0) Hiç Sertlik Yok</span><span>Aşırı Sertlik (10)</span></div>
+                    <div class="option">
+                        <label><input type="radio" name="q6" value="0"> 0</label> <label><input type="radio" name="q6" value="1"> 1</label> <label><input type="radio" name="q6" value="2"> 2</label> <label><input type="radio" name="q6" value="3"> 3</label> <label><input type="radio" name="q6" value="4"> 4</label> <label><input type="radio" name="q6" value="5"> 5</label> <label><input type="radio" name="q6" value="6"> 6</label> <label><input type="radio" name="q6" value="7"> 7</label> <label><input type="radio" name="q6" value="8"> 8</label> <label><input type="radio" name="q6" value="9"> 9</label> <label><input type="radio" name="q6" value="10"> 10</label>
+                    </div>
+                </div>
+                <div class="question-group">
+                    <div class="question">7. Omzunuzdaki sorundan dolayı boyun kaslarınızda ne kadar rahatsızlık hissediyorsunuz?</div>
+                    <div class="scale-labels"><span>(0) Hiç Rahatsızlık Yok</span><span>Aşırı Rahatsızlık (10)</span></div>
+                    <div class="option">
+                        <label><input type="radio" name="q7" value="0"> 0</label> <label><input type="radio" name="q7" value="1"> 1</label> <label><input type="radio" name="q7" value="2"> 2</label> <label><input type="radio" name="q7" value="3"> 3</label> <label><input type="radio" name="q7" value="4"> 4</label> <label><input type="radio" name="q7" value="5"> 5</label> <label><input type="radio" name="q7" value="6"> 6</label> <label><input type="radio" name="q7" value="7"> 7</label> <label><input type="radio" name="q7" value="8"> 8</label> <label><input type="radio" name="q7" value="9"> 9</label> <label><input type="radio" name="q7" value="10"> 10</label>
+                    </div>
+                </div>
+                <div class="question-group">
+                    <div class="question">8. Omzunuzda ne kadar instabilite (güvensizlik) veya gevşeklik hissediyorsunuz?</div>
+                    <div class="scale-labels"><span>(0) Hiç Yok</span><span>Aşırı Fazla (10)</span></div>
+                    <div class="option">
+                        <label><input type="radio" name="q8" value="0"> 0</label> <label><input type="radio" name="q8" value="1"> 1</label> <label><input type="radio" name="q8" value="2"> 2</label> <label><input type="radio" name="q8" value="3"> 3</label> <label><input type="radio" name="q8" value="4"> 4</label> <label><input type="radio" name="q8" value="5"> 5</label> <label><input type="radio" name="q8" value="6"> 6</label> <label><input type="radio" name="q8" value="7"> 7</label> <label><input type="radio" name="q8" value="8"> 8</label> <label><input type="radio" name="q8" value="9"> 9</label> <label><input type="radio" name="q8" value="10"> 10</label>
+                    </div>
+                </div>
+                <div class="question-group">
+                    <div class="question">9. Omzunuzu ne kadar diğer kaslarınızla telafi ediyorsunuz?</div>
+                    <div class="scale-labels"><span>(0) Hiç Değil</span><span>Aşırı Fazla (10)</span></div>
+                    <div class="option">
+                        <label><input type="radio" name="q9" value="0"> 0</label> <label><input type="radio" name="q9" value="1"> 1</label> <label><input type="radio" name="q9" value="2"> 2</label> <label><input type="radio" name="q9" value="3"> 3</label> <label><input type="radio" name="q9" value="4"> 4</label> <label><input type="radio" name="q9" value="5"> 5</label> <label><input type="radio" name="q9" value="6"> 6</label> <label><input type="radio" name="q9" value="7"> 7</label> <label><input type="radio" name="q9" value="8"> 8</label> <label><input type="radio" name="q9" value="9"> 9</label> <label><input type="radio" name="q9" value="10"> 10</label>
+                    </div>
+                </div>
+                <div class="question-group">
+                    <div class="question">10. Omzunuzda ne kadar hareket kaybı var?</div>
+                    <div class="scale-labels"><span>(0) Kayıp Yok</span><span>Aşırı Kayıp (10)</span></div>
+                    <div class="option">
+                        <label><input type="radio" name="q10" value="0"> 0</label> <label><input type="radio" name="q10" value="1"> 1</label> <label><input type="radio" name="q10" value="2"> 2</label> <label><input type="radio" name="q10" value="3"> 3</label> <label><input type="radio" name="q10" value="4"> 4</label> <label><input type="radio" name="q10" value="5"> 5</label> <label><input type="radio" name="q10" value="6"> 6</label> <label><input type="radio" name="q10" value="7"> 7</label> <label><input type="radio" name="q10" value="8"> 8</label> <label><input type="radio" name="q10" value="9"> 9</label> <label><input type="radio" name="q10" value="10"> 10</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>BÖLÜM 2: Spor, Rekreasyon ve İş</h2>
+                <p class="note">0 = Hiç Zorluk Yok, 10 = Aşırı Zorluk</p>
+
+                <div class="question-group">
+                    <div class="question">11. Omzunuz, spor veya rekreasyonel aktivitelere katılımınızı ne kadar sınırladı?</div>
+                    <div class="scale-labels"><span>(0) Hiç Sınırlamadı</span><span>Aşırı Sınırladı (10)</span></div>
+                    <div class="option">
+                        <label><input type="radio" name="q11" value="0"> 0</label> <label><input type="radio" name="q11" value="1"> 1</label> <label><input type="radio" name="q11" value="2"> 2</label> <label><input type="radio" name="q11" value="3"> 3</label> <label><input type="radio" name="q11" value="4"> 4</label> <label><input type="radio" name="q11" value="5"> 5</label> <label><input type="radio" name="q11" value="6"> 6</label> <label><input type="radio" name="q11" value="7"> 7</label> <label><input type="radio" name="q11" value="8"> 8</label> <label><input type="radio" name="q11" value="9"> 9</label> <label><input type="radio" name="q11" value="10"> 10</label>
+                    </div>
+                </div>
+                <div class="question-group">
+                    <div class="question">12. Omzunuz, spor veya işiniz için gereken özel becerileri yapma yeteneğinizi ne kadar etkiledi?</div>
+                    <div class="scale-labels"><span>(0) Hiç Etkilemedi</span><span>Aşırı Etkiledi (10)</span></div>
+                    <div class="option">
+                        <label><input type="radio" name="q12" value="0"> 0</label> <label><input type="radio" name="q12" value="1"> 1</label> <label><input type="radio" name="q12" value="2"> 2</label> <label><input type="radio" name="q12" value="3"> 3</label> <label><input type="radio" name="q12" value="4"> 4</label> <label><input type="radio" name="q12" value="5"> 5</label> <label><input type="radio" name="q12" value="6"> 6</label> <label><input type="radio" name="q12" value="7"> 7</label> <label><input type="radio" name="q12" value="8"> 8</label> <label><input type="radio" name="q12" value="9"> 9</label> <label><input type="radio" name="q12" value="10"> 10</label>
+                    </div>
+                </div>
+                <div class="question-group">
+                    <div class="question">13. Aktiviteler sırasında kolunuzu ne kadar koruma ihtiyacı hissediyorsunuz?</div>
+                    <div class="scale-labels"><span>(0) Hiç Değil</span><span>Aşırı Fazla (10)</span></div>
+                    <div class="option">
+                        <label><input type="radio" name="q13" value="0"> 0</label> <label><input type="radio" name="q13" value="1"> 1</label> <label><input type="radio" name="q13" value="2"> 2</label> <label><input type="radio" name="q13" value="3"> 3</label> <label><input type="radio" name="q13" value="4"> 4</label> <label><input type="radio" name="q13" value="5"> 5</label> <label><input type="radio" name="q13" value="6"> 6</label> <label><input type="radio" name="q13" value="7"> 7</label> <label><input type="radio" name="q13" value="8"> 8</label> <label><input type="radio" name="q13" value="9"> 9</label> <label><input type="radio" name="q13" value="10"> 10</label>
+                    </div>
+                </div>
+                <div class="question-group">
+                    <div class="question">14. Omuz seviyesinin altındaki ağır nesneleri kaldırırken ne kadar zorluk yaşıyorsunuz?</div>
+                    <div class="scale-labels"><span>(0) Zorluk Yok</span><span>Aşırı Zorluk (10)</span></div>
+                    <div class="option">
+                        <label><input type="radio" name="q14" value="0"> 0</label> <label><input type="radio" name="q14" value="1"> 1</label> <label><input type="radio" name="q14" value="2"> 2</label> <label><input type="radio" name="q14" value="3"> 3</label> <label><input type="radio" name="q14" value="4"> 4</label> <label><input type="radio" name="q14" value="5"> 5</label> <label><input type="radio" name="q14" value="6"> 6</label> <label><input type="radio" name="q14" value="7"> 7</label> <label><input type="radio" name="q14" value="8"> 8</label> <label><input type="radio" name="q14" value="9"> 9</label> <label><input type="radio" name="q14" value="10"> 10</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>BÖLÜM 3: Yaşam Tarzı</h2>
+                <p class="note">0 = Hiç Zorluk Yok, 10 = Aşırı Zorluk/Korku</p>
+
+                <div class="question-group">
+                    <div class="question">15. Omzunuza düşmekten ne kadar korkuyorsunuz?</div>
+                    <div class="scale-labels"><span>(0) Hiç Korku Yok</span><span>Aşırı Korku (10)</span></div>
+                    <div class="option">
+                        <label><input type="radio" name="q15" value="0"> 0</label> <label><input type="radio" name="q15" value="1"> 1</label> <label><input type="radio" name="q15" value="2"> 2</label> <label><input type="radio" name="q15" value="3"> 3</label> <label><input type="radio" name="q15" value="4"> 4</label> <label><input type="radio" name="q15" value="5"> 5</label> <label><input type="radio" name="q15" value="6"> 6</label> <label><input type="radio" name="q15" value="7"> 7</label> <label><input type="radio" name="q15" value="8"> 8</label> <label><input type="radio" name="q15" value="9"> 9</label> <label><input type="radio" name="q15" value="10"> 10</label>
+                    </div>
+                </div>
+                <div class="question-group">
+                    <div class="question">16. İstediğiniz fitness (kondisyon) seviyesini korumakta ne kadar zorluk çekiyorsunuz?</div>
+                    <div class="scale-labels"><span>(0) Zorluk Yok</span><span>Aşırı Zorluk (10)</span></div>
+                    <div class="option">
+                        <label><input type="radio" name="q16" value="0"> 0</label> <label><input type="radio" name="q16" value="1"> 1</label> <label><input type="radio" name="q16" value="2"> 2</label> <label><input type="radio" name="q16" value="3"> 3</label> <label><input type="radio" name="q16" value="4"> 4</label> <label><input type="radio" name="q16" value="5"> 5</label> <label><input type="radio" name="q16" value="6"> 6</label> <label><input type="radio" name="q16" value="7"> 7</label> <label><input type="radio" name="q16" value="8"> 8</label> <label><input type="radio" name="q16" value="9"> 9</label> <label><input type="radio" name="q16" value="10"> 10</label>
+                    </div>
+                </div>
+                <div class="question-group">
+                    <div class="question">17. Aileniz veya arkadaşlarınızla "şakalaşmak" veya "boğuşmak" konusunda ne kadar zorluk çekiyorsunuz?</div>
+                    <div class="scale-labels"><span>(0) Zorluk Yok</span><span>Aşırı Zorluk (10)</span></div>
+                    <div class="option">
+                        <label><input type="radio" name="q17" value="0"> 0</label> <label><input type="radio" name="q17" value="1"> 1</label> <label><input type="radio" name="q17" value="2"> 2</label> <label><input type="radio" name="q17" value="3"> 3</label> <label><input type="radio" name="q17" value="4"> 4</label> <label><input type="radio" name="q17" value="5"> 5</label> <label><input type="radio" name="q17" value="6"> 6</label> <label><input type="radio" name="q17" value="7"> 7</label> <label><input type="radio" name="q17" value="8"> 8</label> <label><input type="radio" name="q17" value="9"> 9</label> <label><input type="radio" name="q17" value="10"> 10</label>
+                    </div>
+                </div>
+                <div class="question-group">
+                    <div class="question">18. Omzunuz yüzünden uyumakta ne kadar zorluk çekiyorsunuz?</div>
+                    <div class="scale-labels"><span>(0) Zorluk Yok</span><span>Aşırı Zorluk (10)</span></div>
+                    <div class="option">
+                        <label><input type="radio" name="q18" value="0"> 0</label> <label><input type="radio" name="q18" value="1"> 1</label> <label><input type="radio" name="q18" value="2"> 2</label> <label><input type="radio" name="q18" value="3"> 3</label> <label><input type="radio" name="q18" value="4"> 4</label> <label><input type="radio" name="q18" value="5"> 5</label> <label><input type="radio" name="q18" value="6"> 6</label> <label><input type="radio" name="q18" value="7"> 7</label> <label><input type="radio" name="q18" value="8"> 8</label> <label><input type="radio" name="q18" value="9"> 9</label> <label><input type="radio" name="q18" value="10"> 10</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>BÖLÜM 4: Duygular</h2>
+                <p class="note">0 = Hiç Değil, 10 = Aşırı Derecede</p>
+
+                <div class="question-group">
+                    <div class="question">19. Omzunuzun ne kadar farkındasınız (bilincindesiniz)?</div>
+                    <div class="scale-labels"><span>(0) Hiç Değil</span><span>Aşırı Farkındayım (10)</span></div>
+                    <div class="option">
+                        <label><input type="radio" name="q19" value="0"> 0</label> <label><input type="radio" name="q19" value="1"> 1</label> <label><input type="radio" name="q19" value="2"> 2</label> <label><input type="radio" name="q19" value="3"> 3</label> <label><input type="radio" name="q19" value="4"> 4</label> <label><input type="radio" name="q19" value="5"> 5</label> <label><input type="radio" name="q19" value="6"> 6</label> <label><input type="radio" name="q19" value="7"> 7</label> <label><input type="radio" name="q19" value="8"> 8</label> <label><input type="radio" name="q19" value="9"> 9</label> <label><input type="radio" name="q19" value="10"> 10</label>
+                    </div>
+                </div>
+                <div class="question-group">
+                    <div class="question">20. Omzunuzun kötüleşmesi konusunda ne kadar endişelisiniz?</div>
+                    <div class="scale-labels"><span>(0) Hiç Endişeli Değilim</span><span>Aşırı Endişeliyim (10)</span></div>
+                    <div class="option">
+                        <label><input type="radio" name="q20" value="0"> 0</label> <label><input type="radio" name="q20" value="1"> 1</label> <label><input type="radio" name="q20" value="2"> 2</label> <label><input type="radio" name="q20" value="3"> 3</label> <label><input type="radio" name="q20" value="4"> 4</label> <label><input type="radio" name="q20" value="5"> 5</label> <label><input type="radio" name="q20" value="6"> 6</label> <label><input type="radio" name="q20" value="7"> 7</label> <label><input type="radio" name="q20" value="8"> 8</label> <label><input type="radio" name="q20" value="9"> 9</label> <label><input type="radio" name="q20" value="10"> 10</label>
+                    </div>
+                </div>
+                <div class="question-group">
+                    <div class="question">21. Omzunuz yüzünden ne kadar hayal kırıklığı hissediyorsunuz?</div>
+                    <div class="scale-labels"><span>(0) Hiç Hayal Kırıklığı Yok</span><span>Aşırı Hayal Kırıklığı (10)</span></div>
+                    <div class="option">
+                        <label><input type="radio" name="q21" value="0"> 0</label> <label><input type="radio" name="q21" value="1"> 1</label> <label><input type="radio" name="q21" value="2"> 2</label> <label><input type="radio" name="q21" value="3"> 3</label> <label><input type="radio" name="q21" value="4"> 4</label> <label><input type="radio" name="q21" value="5"> 5</label> <label><input type="radio" name="q21" value="6"> 6</label> <label><input type="radio" name="q21" value="7"> 7</label> <label><input type="radio" name="q21" value="8"> 8</label> <label><input type="radio" name="q21" value="9"> 9</label> <label><input type="radio" name="q21" value="10"> 10</label>
+                    </div>
+                </div>
+            </div>
+
+
+            <button type="button" id="calculateButton" onclick="calculateWOSI()">PUANLARI HESAPLA</button>
+
+            <div id="results">
+                <h2>WOSI Alt Skorları (0-100)</h2>
+                <p class="note" style="text-align: center; font-weight: bold; font-size: 1.1em; color: #0056b3;">
+                    DİKKAT: 100 = En İyi (Sorun Yok), 0 = En Kötü (Aşırı Sorun)
+                </p>
+                <p id="scorePhysical">Fiziksel Semptomlar (10 Soru): -</p>
+                <p id="scoreSport">Spor/Rekreasyon/İş (4 Soru): -</p>
+                <p id="scoreLifestyle">Yaşam Tarzı (4 Soru): -</p>
+                <p id="scoreEmotion">Duygular (3 Soru): -</p>
+                <p id="scoreTotal" style="font-size: 1.4em; border-top: 2px solid #0056b3; padding-top: 10px;">TOPLAM WOSI SKORU (21 Soru): -</p>
+                
+                <button type="button" id="sendToDoctorButton" onclick="sendResultsToDoctor()">
+                    Sonuçları Doktoruma WhatsApp ile Gönder
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+    <script>
+    
+        const DOKTORUN_TELEFON_NUMARASI = "905426128102"; // Sizin numaranız burada
+
+        let finalScores = {
+            physical: 0,
+            sport: 0,
+            lifestyle: 0,
+            emotion: 0,
+            total: 0
+        };
+
+        // Skor Hesaplama (100 = En İyi, 0 = En Kötü)
+        // Formül: (Max Puan - Alınan Puan) / Max Puan * 100
+        // VEYA ( 210 - Toplam Puan ) / 2.1
+        function normalizeScore(rawSum, maxRawSum) {
+            if (maxRawSum === 0) return 0;
+            let score = ((maxRawSum - rawSum) / maxRawSum) * 100;
+            return Math.round(score);
+        }
+
+        function calculateWOSI() {
+            const form = document.getElementById('wosiForm');
+            let missingQuestions = false;
+
+            function getRadioValue(name) {
+                const radios = form.elements[name];
+                if (!radios) return -1;
+                for (let i = 0; i < radios.length; i++) {
+                    if (radios[i].checked) {
+                        return parseInt(radios[i].value, 10);
+                    }
+                }
+                return -1; // Cevaplanmamış
+            }
+
+            let sums = { physical: 0, sport: 0, lifestyle: 0, emotion: 0 };
+            
+            // Bölüm 1: Fiziksel Semptomlar (q1-q10) - 10 soru, Max 100 puan
+            for (let i = 1; i <= 10; i++) {
+                let val = getRadioValue('q' + i);
+                if (val === -1) { missingQuestions = true; } else { sums.physical += val; }
+            }
+
+            // Bölüm 2: Spor/İş (q11-q14) - 4 soru, Max 40 puan
+            for (let i = 11; i <= 14; i++) {
+                let val = getRadioValue('q' + i);
+                if (val === -1) { missingQuestions = true; } else { sums.sport += val; }
+            }
+
+            // Bölüm 3: Yaşam Tarzı (q15-q18) - 4 soru, Max 40 puan
+            for (let i = 15; i <= 18; i++) {
+                let val = getRadioValue('q' + i);
+                if (val === -1) { missingQuestions = true; } else { sums.lifestyle += val; }
+            }
+            
+            // Bölüm 4: Duygular (q19-q21) - 3 soru, Max 30 puan
+            for (let i = 19; i <= 21; i++) {
+                let val = getRadioValue('q' + i);
+                if (val === -1) { missingQuestions = true; } else { sums.emotion += val; }
+            }
+
+            if (missingQuestions) {
+                alert("Lütfen tüm 21 soruyu cevapladığınızdan emin olun.");
+                return;
+            }
+
+            // 0-100 arasına dönüştür (100 = En İyi)
+            finalScores.physical = normalizeScore(sums.physical, 100);
+            finalScores.sport = normalizeScore(sums.sport, 40);
+            finalScores.lifestyle = normalizeScore(sums.lifestyle, 40);
+            finalScores.emotion = normalizeScore(sums.emotion, 30);
+
+            let totalRawSum = sums.physical + sums.sport + sums.lifestyle + sums.emotion;
+            finalScores.total = normalizeScore(totalRawSum, 210); // 100+40+40+30 = 210
+
+            // Sonuçları göster
+            const resultsDiv = document.getElementById('results');
+            document.getElementById('scorePhysical').innerText = `Fiziksel Semptomlar: ${finalScores.physical} / 100`;
+            document.getElementById('scoreSport').innerText = `Spor/Rekreasyon/İş: ${finalScores.sport} / 100`;
+            document.getElementById('scoreLifestyle').innerText = `Yaşam Tarzı: ${finalScores.lifestyle} / 100`;
+            document.getElementById('scoreEmotion').innerText = `Duygular: ${finalScores.emotion} / 100`;
+            document.getElementById('scoreTotal').innerText = `TOPLAM WOSI SKORU: ${finalScores.total} / 100`;
+            
+            resultsDiv.style.display = 'block';
+            document.getElementById('sendToDoctorButton').style.display = 'block';
+            resultsDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // =================================================================
+        // ========= DETAYLI DÖKÜM İÇİN FONKSİYONLAR =======================
+        // =================================================================
+
+        function getSelectedAnswerValue(name) {
+            const form = document.getElementById('wosiForm');
+            const radios = form.elements[name];
+            if (!radios) return "Soru bulunamadı";
+            
+            for (let i = 0; i < radios.length; i++) {
+                if (radios[i].checked) {
+                    return radios[i].value; // Sadece '0-10' değerini döner
+                }
+            }
+            return "Cevaplanmadı";
+        }
+
+        function sendResultsToDoctor() {
+            if (DOKTORUN_TELEFON_NUMARASI.length < 12) {
+                alert("Form sahibi (doktor) kendi telefon numarasını koda eklememiş.");
+                return;
+            }
+
+            const form = document.getElementById('wosiForm');
+            const hastaAdi = form.elements['hasta_adi'].value;
+            const hastaSoyadi = form.elements['hasta_soyadi'].value;
+            
+            if (!hastaAdi || !hastaSoyadi) {
+                alert("Lütfen sonuçları göndermeden önce Ad ve Soyad alanlarını doldurun.");
+                return;
+            }
+
+            let message = `--- WOSI Omuz İnstabilite Sonucu ---\n\n`;
+            message += `Hasta Adı: *${hastaAdi} ${hastaSoyadi}*\n\n`;
+            
+            message += `--- SKOR ÖZETİ (100 = En İyi) ---\n`;
+            message += `Fiziksel Semptomlar: *${finalScores.physical} / 100*\n`;
+            message += `Spor/İş: *${finalScores.sport} / 100*\n`;
+            message += `Yaşam Tarzı: *${finalScores.lifestyle} / 100*\n`;
+            message += `Duygular: *${finalScores.emotion} / 100*\n`;
+            message += `TOPLAM SKOR: *${finalScores.total} / 100*\n\n`;
+            
+            message += `--- DETAYLI YANIT DÖKÜMÜ (Puan 0-10) ---\n\n`;
+            message += `BÖLÜM 1: Fiziksel Semptomlar\n`;
+            for(let i=1; i<=10; i++) { message += `Soru ${i}: ${getSelectedAnswerValue('q'+i)}\n`; }
+            
+            message += `\nBÖLÜM 2: Spor/İş\n`;
+            for(let i=11; i<=14; i++) { message += `Soru ${i}: ${getSelectedAnswerValue('q'+i)}\n`; }
+
+            message += `\nBÖLÜM 3: Yaşam Tarzı\n`;
+            for(let i=15; i<=18; i++) { message += `Soru ${i}: ${getSelectedAnswerValue('q'+i)}\n`; }
+            
+            message += `\nBÖLÜM 4: Duygular\n`;
+            for(let i=19; i<=21; i++) { message += `Soru ${i}: ${getSelectedAnswerValue('q'+i)}\n`; }
+            
+            message += `\n(Bu mesaj hasta tarafından form üzerinden otomatik olarak gönderilmiştir.)`;
+
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappURL = `https: //wa.me/${DOKTORUN_TELEFON_NUMARASI}?text=${encodedMessage}`;
+            
+            window.open(whatsappURL, '_blank');
+        }
+    </script>
+
+</body>
+</html>
