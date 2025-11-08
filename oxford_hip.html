@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oxford Hip Score (OHS)</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f8f9fa;
+            color: #212529;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 25px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        h1, h2 {
+            color: #0056b3;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 10px;
+        }
+        h2 {
+            font-size: 1.5em;
+            margin-top: 30px;
+        }
+        .section {
+            margin-bottom: 25px;
+            background-color: #fdfdfd;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #495057;
+        }
+        .form-group input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            box-sizing: border-box; 
+        }
+        
+        .question-group {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #f1f3f5;
+            padding-bottom: 15px;
+        }
+        .question {
+            font-weight: bold;
+            color: #343a40;
+            margin-bottom: 10px;
+        }
+        .option {
+            margin-bottom: 5px;
+            cursor: pointer;
+            padding-left: 5px;
+        }
+        .option input[type="radio"] {
+            margin-right: 10px;
+        }
+        .option label {
+            cursor: pointer;
+            display: block;
+        }
+        .note {
+            font-size: 0.9em;
+            color: #6c757d;
+            background-color: #f1f3f5;
+            padding: 10px;
+            border-radius: 4px;
+            border-left: 3px solid #0056b3;
+            margin-bottom: 15px;
+        }
+        
+        button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        #calculateButton {
+            background-color: #007bff;
+        }
+        #calculateButton:hover {
+            background-color: #0056b3;
+        }
+        
+        #sendToDoctorButton {
+            background-color: #25D366; /* WhatsApp Yeşili */
+            margin-top: 15px;
+            display: none; /* Başlangıçta gizli */
+        }
+        #sendToDoctorButton:hover {
+            background-color: #128C7E;
+        }
+        
+        #results {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #e6f7ff;
+            border: 1px solid #b3e0ff;
+            border-radius: 5px;
+            text-align: center;
+            display: none; /* Başlangıçta gizli */
+        }
+        #results h2 {
+            margin-top: 0;
+            font-size: 1.8em;
+        }
+        #results p {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #004085;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Oxford Hip Score (OHS)</h1>
+        <p class="note">Lütfen son 4 hafta içinde kalçanızla ilgili yaşadıklarınızı en iyi tanımlayan seçeneği işaretleyin.</p>
+
+        <form id="ohsForm" onsubmit="return false;">
+
+            <div class="section">
+                <h2>Hasta Bilgileri</h2>
+                <div class="form-group">
+                    <label for="hasta_adi">Adınız:</label>
+                    <input type="text" id="hasta_adi" name="hasta_adi" required>
+                </div>
+                <div class="form-group">
+                    <label for="hasta_soyadi">Soyadınız:</label>
+                    <input type="text" id="hasta_soyadi" name="hasta_soyadi" required>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>BÖLÜM 1: 12 Soru</h2>
+                
+                <div class="question-group">
+                    <div class="question">1. Kalça ağrınızı ne düzeyde tanımlarsınız?</div>
+                    <div class="option"><label><input type="radio" name="q1" value="4"> (4) Hiç ağrım olmadı</label></div>
+                    <div class="option"><label><input type="radio" name="q1" value="3"> (3) Çok hafif ağrım oldu</label></div>
+                    <div class="option"><label><input type="radio" name="q1" value="2"> (2) Orta derecede ağrım oldu</label></div>
+                    <div class="option"><label><input type="radio" name="q1" value="1"> (1) Şiddetli ağrım oldu</label></div>
+                    <div class="option"><label><input type="radio" name="q1" value="0"> (0) Dayanılmaz ağrım oldu</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">2. Kalçanızdan dolayı ani ve şiddetli bir ağrı yaşadınız mı?</div>
+                    <div class="option"><label><input type="radio" name="q2" value="4"> (4) Hayır, hiç</label></div>
+                    <div class="option"><label><input type="radio" name="q2" value="3"> (3) Sadece 1-2 kez</label></div>
+                    <div class="option"><label><input type="radio" name="q2" value="2"> (2) Birkaç kez</label></div>
+                    <div class="option"><label><input type="radio" name="q2" value="1"> (1) Çoğu zaman</label></div>
+                    <div class="option"><label><input type="radio" name="q2" value="0"> (0) Her zaman</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">3. Kalça ağrınız nedeniyle gece uykunuzda bir sorun yaşadınız mı?</div>
+                    <div class="option"><label><input type="radio" name="q3" value="4"> (4) Hayır, hiç sorun yaşamadım</label></div>
+                    <div class="option"><label><input type="radio" name="q3" value="3"> (3) Sadece 1 veya 2 gece</label></div>
+                    <div class="option"><label><input type="radio" name="q3" value="2"> (2) Bazı geceler</label></div>
+                    <div class="option"><label><input type="radio" name="q3" value="1"> (1) Çoğu gece</label></div>
+                    <div class="option"><label><input type="radio" name="q3" value="0"> (0) Her gece</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">4. Yıkanırken veya kurulanırken kalça ağrısı nedeniyle bir zorluk yaşadınız mı?</div>
+                    <div class="option"><label><input type="radio" name="q4" value="4"> (4) Hiç zorluk yaşamadım</labe></div>
+                    <div class="option"><label><input type="radio" name="q4" value="3"> (3) Çok az zorlandım</label></div>
+                    <div class="option"><label><input type="radio" name="q4" value="2"> (2) Orta derecede zorlandım</label></div>
+                    <div class="option"><label><input type="radio" name="q4" value="1"> (1) Çok zorlandım</label></div>
+                    <div class="option"><label><input type="radio" name="q4" value="0"> (0) Yapamadım</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">5. Toplu taşıma kullanırken veya kendi arabanızda ne kadar zorlandınız?</div>
+                    <div class="option"><label><input type="radio" name="q5" value="4"> (4) Hiç zorlanmadım</label></div>
+                    <div class="option"><label><input type="radio" name="q5" value="3"> (3) Çok az zorlandım</label></div>
+                    <div class="option"><label><input type="radio" name="q5" value="2"> (2) Orta derecede zorlandım</label></div>
+                    <div class="option"><label><input type="radio" name="q5" value="1"> (1) Çok zorlandım</label></div>
+                    <div class="option"><label><input type="radio" name="q5" value="0"> (0) Yapamadım (Kullanamadım)</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">6. Arabaya binerken veya inerken zorlandınız mı?</div>
+                    <div class="option"><label><input type="radio" name="q6" value="4"> (4) Hiç zorlanmadım</label></div>
+                    <div class="option"><label><input type="radio" name="q6" value="3"> (3) Çok az zorlandım</label></div>
+                    <div class="option"><label><input type="radio" name="q6" value="2"> (2) Orta derecede zorlandım</label></div>
+                    <div class="option"><label><input type="radio" name="q6" value="1"> (1) Çok zorlandım</label></div>
+                    <div class="option"><label><input type="radio" name="q6" value="0"> (0) Yapamadım</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">7. Alışveriş yaparken zorlandınız mı? (Kalçanız nedeniyle)</div>
+                    <div class="option"><label><input type="radio" name="q7" value="4"> (4) Hiç zorlanmadım</label></div>
+                    <div class="option"><label><input type="radio" name="q7" value="3"> (3) Çok az zorlandım</label></div>
+                    <div class="option"><label><input type="radio" name="q7" value="2"> (2) Orta derecede zorlandım</label></div>
+                    <div class="option"><label><input type="radio" name="q7" value="1"> (1) Çok zorlandım</label></div>
+                    <div class="option"><label><input type="radio" name="q7" value="0"> (0) Yapamadım</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">8. Ne kadar yürüyebildiniz? (Kalça ağrısı başlamadan)</div>
+                    <div class="option"><label><input type="radio" name="q8" value="4"> (4) 1 saatten fazla</label></div>
+                    <div class="option"><label><input type="radio" name="q8" value="3"> (3) 30 dk - 1 saat arası</label></div>
+                    <div class="option"><label><input type="radio" name="q8" value="2"> (2) 10 - 30 dk arası</label></div>
+                    <div class="option"><label><input type="radio" name="q8" value="1"> (1) 10 dakikadan az</label></div>
+                    <div class="option"><label><input type="radio" name="q8" value="0"> (0) Yürüyemedim (Sadece ev içinde)</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">9. Merdiven inip çıkarken zorlandınız mı?</div>
+                    <div class="option"><label><input type="radio" name="q9" value="4"> (4) Hiç zorlanmadım</label></div>
+                    <div class="option"><label><input type="radio" name="q9" value="3"> (3) Çok az zorlandım</label></div>
+                    <div class="option"><label><input type="radio" name="q9" value="2"> (2) Orta derecede zorlandım</label></div>
+                    <div class="option"><label><input type="radio" name="q9" value="1"> (1) Çok zorlandım</label></div>
+                    <div class="option"><label><input type="radio" name="q9" value="0"> (0) Yapamadım (Merdiven kullanamadım)</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">10. Ayakta ne kadar durabildiniz? (Kalça ağrısı başlamadan)</div>
+                    <div class="option"><label><input type="radio" name="q10" value="4"> (4) 1 saatten fazla</label></div>
+                    <div class="option"><label><input type="radio" name="q10" value="3"> (3) 30 dk - 1 saat arası</label></div>
+                    <div class="option"><label><input type="radio" name="q10" value="2"> (2) 10 - 30 dk arası</label></div>
+                    <div class="option"><label><input type="radio" name="q10" value="1"> (1) 10 dakikadan az</label></div>
+                    <div class="option"><label><input type="radio" name="q10" value="0"> (0) Ayakta duramadım</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">11. Yürürken aksamanız (topallama) ne düzeydeydi?</div>
+                    <div class="option"><label><input type="radio" name="q11" value="4"> (4) Aksamam yok veya fark edilmiyor</label></div>
+                    <div class="option"><label><input type="radio" name="q11" value="3"> (3) Hafif ve ara sıra aksamam oluyor</label></div>
+                    <div class="option"><label><input type="radio" name="q11" value="2"> (2) Belirgin ve sürekli aksamam oluyor</label></div>
+                    <div class="option"><label><input type="radio" name="q11" value="1"> (1) Çok belirgin aksamam oluyor</label></div>
+                    <div class="option"><label><input type="radio" name="q11" value="0"> (0) Yürüyemiyorum</label></div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">12. Kalça sorununuz iş veya ev işlerinizi etkiledi mi?</div>
+                    <div class="option"><label><input type="radio" name="q12" value="4"> (4) Hiç etkilemedi</label></div>
+                    <div class="option"><label><input type="radio" name="q12" value="3"> (3) Biraz etkiledi</tabel></div>
+                    <div class="option"><label><input type="radio" name="q12" value="2"> (2) Orta düzeyde etkiledi</label></div>
+                    <div class="option"><label><input type="radio" name="q12" value="1"> (1) Çok etkiledi</label></div>
+                    <div class="option"><label><input type="radio" name="q12" value="0"> (0) Tamamen engelledi</label></div>
+                </div>
+
+            </div>
+
+            <button type="button" id="calculateButton" onclick="calculateOHS()">SKORU HESAPLA</button>
+
+            <div id="results">
+                <h2>Oxford Hip Score</h2>
+                <p id="totalScore">Toplam Puan: 0 / 48</p>
+                <p class="note" style="text-align: left; font-size: 1em;">
+                    <b>48 Puan = En İyi Sonuç</b> (Sorun Yok)<br>
+                    <b>0 Puan = En Kötü Sonuç</b> (Aşırı Sorun)
+                </p>
+                
+                <button type="button" id="sendToDoctorButton" onclick="sendResultsToDoctor()">
+                    Sonuçları Doktoruma WhatsApp ile Gönder
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+    <script>
+    
+        const DOKTORUN_TELEFON_NUMARASI = "905426128102"; // Sizin numaranız burada
+        let finalScore = 0; // Skoru global tutalım
+
+        function calculateOHS() {
+            const form = document.getElementById('ohsForm');
+            let totalScore = 0;
+            let questionsAnswered = 0;
+
+            function getRadioValue(name) {
+                const radios = form.elements[name];
+                if (!radios) return -1; 
+                for (let i = 0; i < radios.length; i++) {
+                    if (radios[i].checked) {
+                        return parseInt(radios[i].value, 10);
+                    }
+                }
+                return -1; // Cevaplanmamış
+            }
+
+            // 12 sorunun puanını topla
+            for (let i = 1; i <= 12; i++) {
+                let val = getRadioValue('q' + i);
+                if (val !== -1) {
+                    totalScore += val;
+                    questionsAnswered++;
+                }
+            }
+
+            if (questionsAnswered < 12) {
+                alert("Lütfen 12 sorunun tamamını cevapladığınızdan emin olun.");
+                return;
+            }
+
+            finalScore = totalScore; // Global değişkene ata
+
+            // Sonuçları göster
+            const resultsDiv = document.getElementById('results');
+            document.getElementById('totalScore').innerText = `Toplam Puan: ${finalScore} / 48`;
+            
+            resultsDiv.style.display = 'block';
+            document.getElementById('sendToDoctorButton').style.display = 'block';
+            resultsDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // =================================================================
+        // ========= DETAYLI DÖKÜM İÇİN FONKSİYONLAR =======================
+        // =================================================================
+
+        function getSelectedAnswerText(name) {
+            const form = document.getElementById('ohsForm');
+            const radios = form.elements[name];
+            if (!radios) return "Soru bulunamadı";
+            
+            for (let i = 0; i < radios.length; i++) {
+                if (radios[i].checked) {
+                    return radios[i].parentElement.innerText.trim(); 
+                }
+            }
+            return "Cevaplanmadı";
+        }
+
+        function sendResultsToDoctor() {
+            if (DOKTORUN_TELEFON_NUMARASI.length < 12) {
+                alert("Form sahibi (doktor) kendi telefon numarasını koda eklememiş.");
+                return;
+            }
+
+            const form = document.getElementById('ohsForm');
+            const hastaAdi = form.elements['hasta_adi'].value;
+            const hastaSoyadi = form.elements['hasta_soyadi'].value;
+            
+            if (!hastaAdi || !hastaSoyadi) {
+                alert("Lütfen sonuçları göndermeden önce Ad ve Soyad alanlarını doldurun.");
+                return;
+            }
+
+            // 3. WhatsApp mesajını (DETAYLI DÖKÜM İLE) oluştur
+            let message = `--- Oxford Hip Score (OHS) Sonucu ---\n\n`;
+            message += `Hasta Adı: *${hastaAdi} ${hastaSoyadi}*\n\n`;
+            
+            message += `--- SKOR ÖZETİ (48 = En İyi) ---\n`;
+            message += `Toplam Puan: *${finalScore} / 48*\n\n`;
+            
+            message += `--- DETAYLI YANIT DÖKÜMÜ ---\n`;
+            message += `1 (Ağrı): ${getSelectedAnswerText('q1')}\n`;
+            message += `2 (Ani Ağrı): ${getSelectedAnswerText('q2')}\n`;
+            message += `3 (Gece Ağrısı): ${getSelectedAnswerText('q3')}\n`;
+            message += `4 (Yıkanma): ${getSelectedAnswerText('q4')}\n`;
+            message += `5 (Taşıt): ${getSelectedAnswerText('q5')}\n`;
+            message += `6 (Araba): ${getSelectedAnswerText('q6')}\n`;
+            message += `7 (Alışveriş): ${getSelectedAnswerText('q7')}\n`;
+            message += `8 (Yürüme): ${getSelectedAnswerText('q8')}\n`;
+            message += `9 (Merdiven): ${getSelectedAnswerText('q9')}\n`;
+            message += `10 (Ayakta Durma): ${getSelectedAnswerText('q10')}\n`;
+            message += `11 (Aksama): ${getSelectedAnswerText('q11')}\n`;
+            message += `12 (İş/Ev): ${getSelectedAnswerText('q12')}\n\n`;
+            
+            message += `(Bu mesaj hasta tarafından form üzerinden otomatik olarak gönderilmiştir.)`;
+
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappURL = `https://wa.me/${DOKTORUN_TELEFON_NUMARASI}?text=${encodedMessage}`;
+            
+            window.open(whatsappURL, '_blank');
+        }
+    </script>
+
+</body>
+</html>
