@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VAS Ağrı Skoru</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f8f9fa;
+            color: #212529;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 25px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        h1, h2 {
+            color: #0056b3;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 10px;
+        }
+        h2 {
+            font-size: 1.5em;
+            margin-top: 30px;
+        }
+        .section {
+            margin-bottom: 25px;
+            background-color: #fdfdfd;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 20px;
+        }
+        
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; color: #495057; }
+        .form-group input[type="text"] { width: 100%; padding: 10px; font-size: 1em; border: 1px solid #ced4da; border-radius: 4px; box-sizing: border-box; }
+        
+        .question-group { margin-bottom: 20px; }
+        .question { font-weight: bold; color: #343a40; margin-bottom: 10px; font-size: 1.2em; }
+        .option { margin-bottom: 5px; cursor: pointer; padding-left: 5px; display: inline-block; margin: 5px; }
+        .option input[type="radio"] { margin-right: 5px; }
+        .option label { cursor: pointer; display: inline; font-size: 1.1em; padding: 5px 10px; border: 1px solid #ced4da; border-radius: 4px; }
+        .option input[type="radio"]:checked + label { background-color: #007bff; color: white; border-color: #007bff; }
+        
+        .note { font-size: 0.9em; color: #6c757d; background-color: #f1f3f5; padding: 10px; border-radius: 4px; border-left: 3px solid #0056b3; margin-bottom: 15px; }
+        .scale-labels { display: flex; justify-content: space-between; font-size: 1em; color: #495057; padding: 10px 5px; font-weight: bold; }
+
+        
+        button { display: block; width: 100%; padding: 15px; font-size: 1.2em; font-weight: bold; color: #ffffff; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s ease; }
+        #calculateButton { background-color: #007bff; }
+        #calculateButton:hover { background-color: #0056b3; }
+        #sendToDoctorButton { background-color: #25D366; margin-top: 15px; display: none; }
+        #sendToDoctorButton:hover { background-color: #128C7E; }
+        
+        #results {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #e6f7ff;
+            border: 1px solid #b3e0ff;
+            border-radius: 5px;
+            text-align: center;
+            display: none;
+        }
+        #results h2 { margin-top: 0; font-size: 1.8em; }
+        #results p { font-size: 1.3em; font-weight: bold; color: #004085; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>VAS (Görsel Analog Skala) Ağrı Skoru</h1>
+        <p class="note">Lütfen şu anki ağrı seviyenizi en iyi tanımlayan numarayı seçin.</p>
+
+        <form id="vasForm" onsubmit="return false;">
+
+            <div class="section">
+                <h2>Hasta Bilgileri</h2>
+                <div class="form-group">
+                    <label for="hasta_adi">Adınız:</label>
+                    <input type="text" id="hasta_adi" name="hasta_adi" required>
+                </div>
+                <div class="form-group">
+                    <label for="hasta_soyadi">Soyadınız:</label>
+                    <input type="text" id="hasta_soyadi" name="hasta_soyadi" required>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Ağrı Seviyesi</h2>
+                
+                <div class="question-group">
+                    <div class="question">Lütfen şu anki ağrınızı 0 ile 10 arasında derecelendirin:</div>
+                    <div class="scale-labels">
+                        <span>(0) Hiç Ağrı Yok</span>
+                        <span>(10) Dayanılmaz Ağrı</span>
+                    </div>
+                    <div style="text-align: center;">
+                        <div class="option">
+                            <input type="radio" id="vas0" name="vas" value="0"><label for="vas0">0</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="vas1" name="vas" value="1"><label for="vas1">1</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="vas2" name="vas" value="2"><label for="vas2">2</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="vas3" name="vas" value="3"><label for="vas3">3</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="vas4" name="vas" value="4"><label for="vas4">4</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="vas5" name="vas" value="5"><label for="vas5">5</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="vas6" name="vas" value="6"><label for="vas6">6</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="vas7" name="vas" value="7"><label for="vas7">7</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="vas8" name="vas" value="8"><label for="vas8">8</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="vas9" name="vas" value="9"><label for="vas9">9</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="vas10" name="vas" value="10"><label for="vas10">10</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" id="calculateButton" onclick="calculateVAS()">SKORU GÖSTER</button>
+
+            <div id="results">
+                <h2>VAS Ağrı Skoru</h2>
+                <p id="totalScore">Toplam Puan: 0 / 10</p>
+                
+                <button type="button" id="sendToDoctorButton" onclick="sendResultsToDoctor()">
+                    Sonucu Doktoruma WhatsApp ile Gönder
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+    <script>
+    
+        const DOKTORUN_TELEFON_NUMARASI = "905426128102"; // Sizin numaranız burada
+        let finalScore = -1; // Skoru global tutalım
+
+        function calculateVAS() {
+            const form = document.getElementById('vasForm');
+
+            function getRadioValue(name) {
+                const radios = form.elements[name];
+                if (!radios) return -1; 
+                for (let i = 0; i < radios.length; i++) {
+                    if (radios[i].checked) {
+                        return parseInt(radios[i].value, 10);
+                    }
+                }
+                return -1; // Cevaplanmamış
+            }
+
+            finalScore = getRadioValue('vas');
+
+            if (finalScore === -1) {
+                alert("Lütfen 0 ile 10 arasında bir puan seçin.");
+                return;
+            }
+
+            // Sonuçları göster
+            const resultsDiv = document.getElementById('results');
+            document.getElementById('totalScore').innerText = `Ağrı Skorunuz: ${finalScore} / 10`;
+            
+            resultsDiv.style.display = 'block';
+            document.getElementById('sendToDoctorButton').style.display = 'block';
+            resultsDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // =================================================================
+        // ========= DETAYLI DÖKÜM İÇİN FONKSİYONLAR =======================
+        // =================================================================
+
+        function getSelectedAnswerText(name) {
+            const form = document.getElementById('vasForm');
+            const radios = form.elements[name];
+            if (!radios) return "Soru bulunamadı";
+            
+            for (let i = 0; i < radios.length; i++) {
+                if (radios[i].checked) {
+                    // Label'ın içindeki metni değil, doğrudan değeri alalım
+                    return radios[i].value; 
+                }
+            }
+            return "Cevaplanmadı";
+        }
+
+        function sendResultsToDoctor() {
+            if (DOKTORUN_TELEFON_NUMARASI.length < 12) {
+                alert("Form sahibi (doktor) kendi telefon numarasını koda eklememiş.");
+                return;
+            }
+
+            const form = document.getElementById('vasForm');
+            const hastaAdi = form.elements['hasta_adi'].value;
+            const hastaSoyadi = form.elements['hasta_soyadi'].value;
+            
+            if (!hastaAdi || !hastaSoyadi) {
+                alert("Lütfen sonuçları göndermeden önce Ad ve Soyad alanlarını doldurun.");
+                return;
+            }
+            
+            if (finalScore === -1) {
+                 alert("Lütfen önce skoru hesaplayın.");
+                return;
+            }
+
+            // 3. WhatsApp mesajını (DETAYLI DÖKÜM İLE) oluştur
+            let message = `--- VAS Ağrı Skoru Sonucu ---\n\n`;
+            message += `Hasta Adı: *${hastaAdi} ${hastaSoyadi}*\n\n`;
+            message += `Seçilen Ağrı Skoru (0-10):\n`;
+            message += `*${finalScore} / 10*\n\n`;
+            message += `(0=Hiç Ağrı Yok, 10=Dayanılmaz Ağrı)\n`;
+            
+            message += `\n(Bu mesaj hasta tarafından form üzerinden otomatik olarak gönderilmiştir.)`;
+
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappURL = `https://wa.me/${DOKTORUN_TELEFON_NUMARASI}?text=${encodedMessage}`;
+            
+            window.open(whatsappURL, '_blank');
+        }
+    </script>
+
+</body>
+</html>
