@@ -262,7 +262,14 @@
         // !!! DİKKAT: BURAYA KENDİ WHATSAPP NUMARANIZI YAZIN !!!
         // Örnek: const DOKTORUN_TELEFON_NUMARASI = "905321234567";
         // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        const DOKTORUN_TELEFON_NUMARASI = "905426128102"; // <<<<<<<<<<<< BURAYI DÜZENLEYİN
+       // --- YENİ KOD BAŞLANGICI (Numarayı URL'den alır) ---
+        // URL'den 'phone' parametresini (örn: ?phone=905xxxx) ara
+        const params = new URLSearchParams(window.location.search);
+        const phoneFromURL = params.get('phone');
+        
+        // Eğer URL'de numara varsa onu, yoksa sizin varsayılan numaranızı (fallback) kullan
+        const DOKTORUN_TELEFON_NUMARASI = phoneFromURL || "905426128102";
+        // --- YENİ KOD BİTİŞİ ---
 
 
         function calculateHHS() {
@@ -370,4 +377,5 @@
 
 </body>
 </html>
+
 
