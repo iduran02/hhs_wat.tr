@@ -42,17 +42,24 @@
             color: #495057;
         }
         .form-group input[type="tel"],
-        .form-group input[type="text"] {
+        .form-group input[type="text"],
+        .form-group textarea {
             width: 100%;
             padding: 12px;
             font-size: 1.1em;
             border: 1px solid #ced4da;
             border-radius: 4px;
             box-sizing: border-box; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+        }
+        .clinician-input {
+            background-color: #e6f7ff;
+            border-color: #007bff;
         }
         .score-list {
             display: grid;
-            grid-template-columns: 1fr 1fr; /* İki sütunlu liste */
+            grid-template-columns: 1fr 1fr;
             gap: 10px;
             margin-top: 15px;
         }
@@ -111,10 +118,16 @@
         </div>
         <div class="form-group">
             <label for="hasta_telefon">Hastanın WhatsApp Numarası:</label>
-            <input type="tel" id="hasta_telefon" placeholder="Örn: 5xxxxxxxxx" required>
+            <input type="tel" id="hasta_telefon" placeholder="Örn: 5xxxxxxxxx" required="">
         </div>
 
-        <h2>Adım 2: Gönderilecek Formları Seçin</h2>
+        <h2>Adım 2: Sizin (Klinisyenin) Numaranız</h2>
+        <div class="form-group">
+            <label for="clinician_phone">Sonuçların Gönderileceği Numara:</label>
+            <input type="tel" id="clinician_phone" class="clinician-input" value="905426128102" required="">
+        </div>
+
+        <h2>Adım 3: Gönderilecek Formları Seçin</h2>
         <div class="score-list">
             
             <div class="score-item">
@@ -133,7 +146,6 @@
                 <input type="checkbox" id="score_oxford_hip" value="oxford_hip.html" data-name="Oxford Kalça Skoru">
                 <label for="score_oxford_hip">Oxford Kalça Skoru</label>
             </div>
-
             <div class="score-item">
                 <input type="checkbox" id="score_koos" value="koos.html" data-name="KOOS (Diz)">
                 <label for="score_koos">KOOS (Diz)</label>
@@ -142,7 +154,6 @@
                 <input type="checkbox" id="score_womac" value="womac.html" data-name="WOMAC (Diz/Kalça)">
                 <label for="score_womac">WOMAC (Diz/Kalça)</label>
             </div>
-
             <div class="score-item">
                 <input type="checkbox" id="score_oxford_shoulder" value="oxford_shoulder.html" data-name="Oxford Omuz Skoru">
                 <label for="score_oxford_shoulder">Oxford Omuz Skoru</label>
@@ -151,41 +162,35 @@
                 <input type="checkbox" id="score_wosi" value="wosi.html" data-name="WOSI (Omuz İnstabilite)">
                 <label for="score_wosi">WOSI (Omuz İnstabilite)</label>
             </div>
-
             <div class="score-item">
                 <input type="checkbox" id="score_fadi" value="fadi.html" data-name="FADI (Ayak/Ayak Bileği)">
                 <label for="score_fadi">FADI (Ayak/Ayak Bileği)</label>
             </div>
-
             <div class="score-item">
                 <input type="checkbox" id="score_dash" value="dash.html" data-name="DASH (Kol/Omuz/El)">
                 <label for="score_dash">DASH (Kol/Omuz/El)</label>
             </div>
-
             <div class="score-item">
                 <input type="checkbox" id="score_vas" value="vas_pain.html" data-name="VAS Ağrı Skoru">
                 <label for="score_vas">VAS Ağrı Skoru</label>
             </div>
+        </div>
 
+        <h2>Adım 4: Ek Kaynaklar (İsteğe bağlı)</h2>
+        <div class="form-group">
+            <label for="custom_links">Özel Linkler (YouTube, Egzersiz Kılavuzu vb.):</label>
+            <textarea id="custom_links" rows="4" placeholder="Hastaya göndermek istediğiniz ek linkleri (örn. YouTube videosu, PDF kılavuz) buraya yapıştırın..."></textarea>
         </div>
         
-        <button type="button" onclick="sendFormLinks()">Seçilen Formları WhatsApp ile Gönder</button>
+        <button type="button" onclick="sendFormLinks()">Seçilenleri WhatsApp ile Gönder</button>
     </div>
 
     <script>
         // Sizin GitHub repo adresiniz
         const REPO_BASE_URL = "https://iduran02.github.io/hhs_wat.tr/";
 
-        function sendFormLinks() {
-            // 1. Hasta Bilgilerini al
-            let phone = document.getElementById('hasta_telefon').value;
-            const name = document.getElementById('hasta_adi').value;
-
-            // 2. Telefonu formatla
-            if (!phone) {
-                alert("Lütfen hastanın telefon numarasını girin.");
-                return;
-            }
+        function formatPhoneNumber(phone) {
+            if (!phone) return null;
             phone = phone.replace(/\s/g, ''); // Boşlukları sil
             if (phone.startsWith('0')) {
                 phone = phone.substring(1); // Başındaki 0'ı kaldır
@@ -193,44 +198,85 @@
             if (!phone.startsWith('90')) {
                 phone = '90' + phone; // 90 ekle
             }
+            return phone;
+        }
 
-            // 3. Seçilen formları bul
-            const selectedScores = [];
-            const checkboxes = document.querySelectorAll('.score-list input[type="checkbox"]:checked');
-            
-            if (checkboxes.length === 0) {
-                alert("Lütfen göndermek için en az bir form seçin.");
+        // --- sendFormLinks FONKSİYONU GÜNCELLENDİ ---
+        function sendFormLinks() {
+            // 1. Hasta Bilgilerini al
+            let patientPhone = document.getElementById('hasta_telefon').value;
+            const patientName = document.getElementById('hasta_adi').value;
+
+            // 2. Klinisyen Numarasını al (YENİ)
+            let clinicianPhone = document.getElementById('clinician_phone').value;
+
+            // 3. Numaraları formatla
+            patientPhone = formatPhoneNumber(patientPhone);
+            clinicianPhone = formatPhoneNumber(clinicianPhone);
+
+            if (!patientPhone) {
+                alert("Lütfen HASTANIN telefon numarasını girin.");
+                return;
+            }
+            if (!clinicianPhone) {
+                alert("Lütfen SONUÇLARIN GÖNDERİLECEĞİ klinisyen numarasını girin.");
                 return;
             }
 
+            // 4. Seçilen formları bul
+            const selectedScores = [];
+            const checkboxes = document.querySelectorAll('.score-list input[type="checkbox"]:checked');
+            
             checkboxes.forEach(cb => {
+                // YENİ: URL'ye klinisyen numarasını ekliyoruz
+                const urlWithParam = `${REPO_BASE_URL}${cb.value}?phone=${clinicianPhone}`;
+                
                 selectedScores.push({
                     name: cb.dataset.name, // "Harris Kalça Skoru"
-                    url: REPO_BASE_URL + cb.value // "https://.../hhs_detayli.html"
+                    url: urlWithParam // "https://.../hhs_detayli.html?phone=905XXXXXXX"
                 });
             });
 
-            // 4. WhatsApp Mesajını Oluştur
+            // 5. YENİ: Özel linkleri al
+            const customLinks = document.getElementById('custom_links').value.trim();
+
+            // 6. YENİ: Kontrol (en az bir form VEYA bir link seçilmeli)
+            if (checkboxes.length === 0 && customLinks === "") {
+                alert("Lütfen göndermek için en az bir form VEYA bir özel link girin.");
+                return;
+            }
+
+            // 7. WhatsApp Mesajını Oluştur
             let message = "";
-            if (name) {
-                message = `Merhaba ${name} Hanım/Bey,\n\n`;
+            if (patientName) {
+                message = `Merhaba ${patientName} Hanım/Bey,\n\n`;
             } else {
                 message = `Merhaba,\n\n`;
             }
             
-            message += `Durumunuzu değerlendirmek için lütfen aşağıdaki linklerde bulunan formu/formları doldurunuz:\n\n`;
-            
-            // Seçilen her form için bir link ekle
-            selectedScores.forEach(score => {
-                message += `*${score.name}*:\n`;
-                message += `${score.url}\n\n`;
-            });
+            // Seçili formlar varsa ekle
+            if (checkboxes.length > 0) {
+                 message += `Durumunuzu değerlendirmek için lütfen aşağıdaki linklerde bulunan formu/formları doldurunuz:\n\n`;
+                selectedScores.forEach(score => {
+                    message += `*${score.name}*:\n`;
+                    message += `${score.url}\n\n`;
+                });
+            }
+
+            // YENİ: Özel linkler varsa ekle
+            if (customLinks !== "") {
+                if (checkboxes.length > 0) {
+                     message += `---\n\n`; // Formlar ve linkler arasına ayırıcı koy
+                }
+                message += `Ayrıca, sizin için seçtiğim şu kaynakları/videoları inceleyebilirsiniz:\n`;
+                message += `${customLinks}\n\n`;
+            }
 
             message += `Sağlıklı günler dilerim.`;
 
-            // 5. WhatsApp linkini oluştur ve aç
+            // 8. WhatsApp linkini oluştur ve aç
             const encodedMessage = encodeURIComponent(message);
-            const whatsappURL = `https://wa.me/${phone}?text=${encodedMessage}`;
+            const whatsappURL = `https://wa.me/${patientPhone}?text=${encodedMessage}`;
             
             window.open(whatsappURL, '_blank');
         }
