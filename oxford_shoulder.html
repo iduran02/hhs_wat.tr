@@ -289,8 +289,14 @@
     </div>
 
     <script>
-    
-        const DOKTORUN_TELEFON_NUMARASI = "905426128102"; // Sizin numaranız burada
+    // --- YENİ KOD BAŞLANGICI (Numarayı URL'den alır) ---
+        // URL'den 'phone' parametresini (örn: ?phone=905xxxx) ara
+        const params = new URLSearchParams(window.location.search);
+        const phoneFromURL = params.get('phone');
+        
+        // Eğer URL'de numara varsa onu, yoksa sizin varsayılan numaranızı (fallback) kullan
+        const DOKTORUN_TELEFON_NUMARASI = phoneFromURL || "905426128102";
+        // --- YENİ KOD BİTİŞİ ---
         let finalScore = 0; // Skoru global tutalım
 
         function calculateOSS() {
