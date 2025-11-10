@@ -155,14 +155,11 @@
 
     <script>
     
-        // --- YENİ KOD BAŞLANGICI (Numarayı URL'den alır) ---
-        // URL'den 'phone' parametresini (örn: ?phone=905xxxx) ara
-        const params = new URLSearchParams(window.location.search);
-        const phoneFromURL = params.get('phone');
-        
-        // Eğer URL'de numara varsa onu, yoksa sizin varsayılan numaranızı (fallback) kullan
-        const DOKTORUN_TELEFON_NUMARASI = phoneFromURL || "905426128102";
-        // --- YENİ KOD BİTİŞİ ---
+       // --- GÜVENLİ KOD BAŞLANGICI (Numarayı URL'den alır, fallback YOK) ---
+const params = new URLSearchParams(window.location.search);
+const phoneFromURL = params.get('phone');
+const DOKTORUN_TELEFON_NUMARASI = phoneFromURL; // Fallback (...8102) kaldırıldı.
+// --- GÜVENLİ KOD BİTİŞİ ---
         let finalScore = -1; // Skoru global tutalım
 
         function calculateVAS() {
