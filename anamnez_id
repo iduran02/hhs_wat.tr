@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hasta Ön Değerlendirme</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; background-color: #f8f9fa; color: #333; margin: 0; padding: 20px; }
+        .container { max-width: 650px; margin: 0 auto; background: #fff; padding: 25px; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+        h1 { color: #0056b3; text-align: center; font-size: 1.5em; margin-bottom: 20px; }
+        h2 { color: #495057; border-bottom: 2px solid #e9ecef; padding-bottom: 10px; margin-top: 30px; font-size: 1.1em; font-weight: 600; }
+        
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 6px; font-weight: 600; color: #555; font-size: 0.95em; }
+        input[type="text"], input[type="number"], select, textarea { width: 100%; padding: 12px; border: 1px solid #ced4da; border-radius: 6px; font-size: 16px; box-sizing: border-box; font-family: inherit; }
+        textarea { resize: vertical; height: 80px; }
+
+        /* Yan yana inputlar (Boy/Kilo) */
+        .row { display: flex; gap: 15px; }
+        .col { flex: 1; }
+
+        /* Checkbox Tasarımı */
+        .checkbox-wrapper { margin-bottom: 12px; }
+        .main-check-label { display: flex; align-items: center; background: #fff; border: 1px solid #dee2e6; padding: 12px; border-radius: 8px; cursor: pointer; transition: all 0.2s; font-weight: 600; }
+        .main-check-label:hover { background-color: #f1f3f5; }
+        .main-check-label input { margin-right: 15px; transform: scale(1.3); }
+
+        /* Açılır Alt Kutular (Gizli Alanlar) */
+        .hidden-details { display: none; background-color: #f8f9fa; border: 1px solid #e9ecef; border-top: none; margin-top: -5px; margin-bottom: 15px; padding: 15px; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; }
+        
+        /* Alt Seçenekler (Alerji tipleri gibi) */
+        .sub-option { display: inline-flex; align-items: center; margin-right: 15px; margin-bottom: 10px; cursor: pointer; font-size: 0.9em; }
+        .sub-option input { margin-right: 6px; transform: scale(1.1); }
+
+        button { display: block; width: 100%; padding: 16px; background-color: #25D366; color: white; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 30px; }
+        button:hover { background-color: #128C7E; }
+        
+        .info-note { font-size: 0.85em; color: #6c757d; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Hasta Bilgi Formu</h1>
+    
+    <h2>Kişisel Bilgiler</h2>
+    <div class="row">
+        <div class="col"><label>Yaş:</label><input type="number" id="age" placeholder="Örn: 55"></div>
+        <div class="col"><label>Cinsiyet:</label><select id="gender"><option value="K">Kadın</option><option value="E">Erkek</option></select></div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col"><label>Boy (cm):</label><input type="number" id="height" placeholder="170"></div>
+        <div class="col"><label>Kilo (kg):</label><input type="number" id="weight" placeholder="75"></div>
+    </div>
+
+    <h2>Alışkanlıklar</h2>
+    
+    <div class="checkbox-wrapper">
+        <label class="main-check-label">
+            <input type="checkbox" id="check_smoking" onchange="toggleBox('box_smoking', this.checked)">
+            Sigara kullanıyorum
+        </label>
+        <div id="box_smoking" class="hidden-details">
+            <div class="row">
+                <div class="col"><input type="number" id="smoke_amount" placeholder="Günde kaç adet?"></div>
+                <div class="col"><input type="number" id="smoke_years" placeholder="Kaç yıldır?"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="alcohol">Alkol Kullanımı:</label>
+        <select id="alcohol">
+            <option value="Kullanmıyorum">Kullanmıyorum</option>
+            <option value="Sosyal">Sosyal (Ayda 1-2 kez)</option>
+            <option value="Haftada 1-2">Haftada 1-2 kez</option>
+            <option value="Her Gün">Her gün (Düzenli)</option>
+        </select>
+    </div>
+
+    <h2>Tıbbi Durum & İlaçlar</h2>
+
+    <div class="checkbox-wrapper">
+        <label class="main-check-label">
+            <input type="checkbox" id="check_meds" onchange="toggleBox('box_meds', this.checked)">
+            Düzenli kullandığım İLAÇLAR var
+        </label>
+        <div id="box_meds" class="hidden-details">
+            <label style="font-weight:normal; font-size:0.9em;">Lütfen kullandığınız ilaçları (Kan sulandırıcı, Tansiyon, Şeker vb.) alt alta yazınız:</label>
+            <textarea id="meds_text" placeholder="Örn: Aspirin, Ecopirin, İnsülin..."></textarea>
+        </div>
+    </div>
+
+    <div class="checkbox-wrapper">
+        <label class="main-check-label">
+            <input type="checkbox" id="check_surg" onchange="toggleBox('box_surg', this.checked)">
+            Daha önce AMELİYAT oldum
+        </label>
+        <div id="box_surg" class="hidden-details">
+            <label style="font-weight:normal; font-size:0.9em;">Hangi ameliyatları oldunuz? (Özellikle ortopedik olanları belirtiniz):</label>
+            <textarea id="surg_text" placeholder="Örn: 2010 Safra kesesi, 2015 Sağ diz protezi..."></textarea>
+        </div>
+    </div>
+
+    <div class="checkbox-wrapper">
+        <label class="main-check-label">
+            <input type="checkbox" id="check_allergy" onchange="toggleBox('box_allergy', this.checked)">
+            ALERJİM var
+        </label>
+        <div id="box_allergy" class="hidden-details">
+            <div style="margin-bottom:10px;">
+                <label class="sub-option"><input type="checkbox" id="alg_drug"> İlaç Alerjisi</label>
+                <label class="sub-option"><input type="checkbox" id="alg_metal"> Metal/Takı Alerjisi</label>
+                <label class="sub-option"><input type="checkbox" id="alg_other"> Diğer</label>
+            </div>
+            <input type="text" id="allergy_detail" placeholder="Lütfen detay belirtiniz (Örn: Penikilin, Nikel vb.)">
+        </div>
+    </div>
+
+    <h2>Ek Hastalıklar</h2>
+    <p class="info-note">Aşağıdaki hastalıklardan tanısı konulmuş olanları işaretleyiniz:</p>
+    
+    <div style="display: grid; grid-template-columns: 1fr; gap:8px;">
+        <label class="main-check-label" style="padding:10px; font-weight:normal;"><input type="checkbox" class="cci-check" value="1" data-code="MI"> Kalp Yetmezliği / Kriz Öyküsü</label>
+        <label class="main-check-label" style="padding:10px; font-weight:normal;"><input type="checkbox" class="cci-check" value="1" data-code="KOAH"> KOAH / Astım</label>
+        <label class="main-check-label" style="padding:10px; font-weight:normal;"><input type="checkbox" class="cci-check" value="1" data-code="DM"> Şeker Hastalığı (Organ hasarı YOK)</label>
+        <label class="main-check-label" style="padding:10px; font-weight:normal;"><input type="checkbox" class="cci-check" value="2" data-code="DM+"> Şeker Hastalığı (Göz/Böbrek hasarlı)</label>
+        <label class="main-check-label" style="padding:10px; font-weight:normal;"><input type="checkbox" class="cci-check" value="2" data-code="Böbrek"> Böbrek Yetmezliği</label>
+        <label class="main-check-label" style="padding:10px; font-weight:normal;"><input type="checkbox" class="cci-check" value="1" data-code="İnme"> Felç / İnme Geçmişi</label>
+        <label class="main-check-label" style="padding:10px; font-weight:normal;"><input type="checkbox" class="cci-check" value="2" data-code="Kanser"> Kanser Tedavisi (Son 5 yıl)</label>
+    </div>
+
+    <button onclick="submitForm()">Doktora Gönder</button>
+</div>
+
+<script>
+    // Kutuları açıp kapatan fonksiyon
+    function toggleBox(elementId, isChecked) {
+        const box = document.getElementById(elementId);
+        if (isChecked) {
+            box.style.display = "block";
+        } else {
+            box.style.display = "none";
+        }
+    }
+
+    function calculateBMI(h, w) {
+        if (!h || !w) return "?";
+        let h_m = h / 100;
+        let bmi = w / (h_m * h_m);
+        return bmi.toFixed(1);
+    }
+
+    function calculatePackYear() {
+        if (!document.getElementById('check_smoking').checked) return "0";
+        const amount = parseFloat(document.getElementById('smoke_amount').value) || 0;
+        const years = parseFloat(document.getElementById('smoke_years').value) || 0;
+        return ((amount / 20) * years).toFixed(1);
+    }
+
+    function calculateCCI() {
+        let score = 0;
+        let codes = [];
+        document.querySelectorAll('.cci-check:checked').forEach(cb => {
+            score += parseInt(cb.value);
+            codes.push(cb.getAttribute('data-code'));
+        });
+        const age = parseInt(document.getElementById('age').value) || 0;
+        if (age >= 50) score += 1; 
+        if (age >= 60) score += 1; 
+        if (age >= 70) score += 1; 
+        if (age >= 80) score += 1;
+        return { score: score, codes: codes };
+    }
+
+    function submitForm() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const clinicianPhone = urlParams.get('phone');
+        if (!clinicianPhone) { alert("Hata: Doktor numarası bulunamadı."); return; }
+
+        // Temel Veriler
+        const age = document.getElementById('age').value;
+        const gender = document.getElementById('gender').value;
+        const bmi = calculateBMI(document.getElementById('height').value, document.getElementById('weight').value);
+
+        // Alışkanlıklar
+        const py = calculatePackYear();
+        const smoking = (py > 0) ? `(+) ${py} P/Y` : "(-)";
+        
+        // ALKOL VERİSİNİ AL (YENİ)
+        const alcohol = document.getElementById('alcohol').value;
+
+        // Dinamik Alanlar
+        let meds = "Yok";
+        if (document.getElementById('check_meds').checked) {
+            meds = document.getElementById('meds_text').value || "Belirtilmedi";
+        }
+
+        let surgs = "Yok";
+        if (document.getElementById('check_surg').checked) {
+            surgs = document.getElementById('surg_text').value || "Belirtilmedi";
+        }
+
+        let allergies = [];
+        if (document.getElementById('check_allergy').checked) {
+            if(document.getElementById('alg_drug').checked) allergies.push("İLAÇ");
+            if(document.getElementById('alg_metal').checked) allergies.push("METAL");
+            if(document.getElementById('alg_other').checked) allergies.push("DİĞER");
+            const detail = document.getElementById('allergy_detail').value;
+            if(detail) allergies.push(`Detay: ${detail}`);
+        }
+        const allergyText = allergies.length > 0 ? allergies.join(", ") : "Yok";
+
+        // CCI
+        const cciData = calculateCCI();
+
+        // Mesaj Oluşturma
+        let msg = `*ANAMNEZ ÖZETİ*\n`;
+        msg += `Hasta: ${age}y / ${gender} (BMI: ${bmi})\n`;
+        msg += `Sigara: ${smoking}\n`;
+        msg += `Alkol: ${alcohol}\n`; // MESAJDA ALKOL EKLENDİ
+        msg += `------------------\n`;
+        msg += `*İLAÇLAR:* ${meds}\n`;
+        msg += `*AMELİYATLAR:* ${surgs}\n`;
+        msg += `*ALERJİ:* ${allergyText}\n`;
+        msg += `------------------\n`;
+        msg += `Komorbidite: ${cciData.codes.join(', ') || 'Yok'}\n`;
+        msg += `*CCI SKOR: ${cciData.score}*`;
+
+        window.location.href = `https://wa.me/${clinicianPhone}?text=${encodeURIComponent(msg)}`;
+    }
+</script>
+
+</body>
+</html>
